@@ -45,4 +45,29 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class);
+    // }
+
+    public function hasRole($role)
+    {
+        return null !== $this->roles()->where('name', $role)->first();
+    }
+
+    public function inscripcionesIndividuales()
+    {
+        return $this->hasMany(InscripcionIndividual::class, 'participante_id');
+    }
+
+    public function ganadoresIndividuales()
+    {
+        return $this->hasMany(GanadorIndividual::class, 'id_participante');
+    }
+
+    public function equipos()
+    {
+        return $this->hasMany(Equipo::class);
+    }
 }
