@@ -19,6 +19,11 @@
             })();
         </script>
 
+        <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        </script>
+        <script defer src="/_vercel/insights/script.js"></script>
+
         {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
             html {
