@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import logoLight from '@/../../public/images/Logo2025black.webp';
+import logoDark from '@/../../public/images/Logo2025white.webp';
 </script>
 
 <template>
-    <Head title="Inicio"> </Head>
-    <div class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-        <div class="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-            <main class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <div
-                    class="flex-1 rounded-br-lg rounded-bl-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-tl-lg lg:rounded-br-none lg:p-20 dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"
-                >
-                    <h1 class="mb-1 font-medium">Página en construcción</h1>
-                </div>
-            </main>
+    <Head title="Bienvenidos"> </Head>
+    <div
+        class="flex min-h-screen flex-col items-center justify-center bg-beige bg-[url('/public/images/texture.webp')] dark:bg-none p-6 text-[#1b1b18] lg:p-8 dark:bg-[#070706]"
+    >
+        <div class="flex flex-col items-center justify-center opacity-100 transition-opacity duration-750 starting:opacity-0">
+            <picture>
+                <source :srcset="logoLight" media="(prefers-color-scheme: dark)" />
+                <img class="w-98 mx-auto" :src="logoDark" alt="Logo" />
+            </picture>
+            <span class="font-cinzel text-wine dark:text-beige text-2xl">Próximamente</span>
+            <span class="font-cinzel text-wine dark:text-beige text-base">Junio 10, 11, 12</span>
         </div>
     </div>
 </template>
