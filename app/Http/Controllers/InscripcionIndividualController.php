@@ -230,55 +230,59 @@ class InscripcionIndividualController extends Controller
         }
     }
 
+    public function get_mis_inscripciones(Request $request): Response
+    {
+        // Obteniendo el usuario autenticado
+        $user = Auth::guard('web')->user();
 
+        // Verifica que $user sea instancia de App\Models\User antes de llamar a hasRole
+        $role = false;
+        if ($user instanceof \App\Models\User) {
+            $role = $user->hasRole("admin");
+        }
 
-    // public function get_mis_inscripciones(Request $request): Response
-    // {
-    //     // Obteniendo el usuario autenticado
-    //     $user = Auth::user();
+        // Recuperando las inscripciones individuales
+        $inscripcionesIndividuales = InscripcionIndividual::where('user_id', $user->id)
+            ->with('juego')
+            ->get()
+            ->map(function ($inscripcion) {
+                return [
+                    'tipo' => 'Individual',
+                    'juego_nombre' => $inscripcion->juego->nombre,
+                    'img_id' => $inscripcion->juego->img_id,
+                    'estado_pago' => $inscripcion->estado_pago,
+                ];
+            });
 
-    //     // Recuperando las inscripciones individuales
-    //     $inscripcionesIndividuales = InscripcionIndividual::where('user_id', $user->id)
-    //         ->with('juego')
-    //         ->get()
-    //         ->map(function ($inscripcion) {
-    //             return [
-    //                 'tipo' => 'Individual',
-    //                 'juego_nombre' => $inscripcion->juego->nombre,
-    //                 'img_id' => $inscripcion->juego->img_id,
-    //                 'estado_pago' => $inscripcion->estado_pago,
-    //             ];
-    //         });
+        // Recuperando los equipos del usuario
+        $equipos = Equipo::where('user_id', $user->id)->get();
 
-    //     // Recuperando los equipos del usuario
-    //     $equipos = Equipo::where('user_id', $user->id)->get();
+        // Recuperando las inscripciones grupales
+        $inscripcionesGrupales = collect();
+        foreach ($equipos as $equipo) {
+            $inscripcionesDelEquipo = InscripcionGrupal::where('id_equipo', $equipo->id)
+                ->with('juego')
+                ->get()
+                ->map(function ($inscripcion) use ($equipo) {
+                    return [
+                        'tipo' => 'Grupal',
+                        'juego_nombre' => $inscripcion->juego->nombre,
+                        'img_id' => $inscripcion->juego->img_id,
+                        'equipo_nombre' => $equipo->nombre_equipo,
+                        'equipo_id' => $equipo->id,
+                        'estado_pago' => $inscripcion->estado_pago,
+                    ];
+                });
+            $inscripcionesGrupales = $inscripcionesGrupales->concat($inscripcionesDelEquipo);
+        }
 
-    //     // Recuperando las inscripciones grupales
-    //     $inscripcionesGrupales = collect();
-    //     foreach ($equipos as $equipo) {
-    //         $inscripcionesDelEquipo = InscripcionGrupal::where('id_equipo', $equipo->id)
-    //             ->with('juego')
-    //             ->get()
-    //             ->map(function ($inscripcion) use ($equipo) {
-    //                 return [
-    //                     'tipo' => 'Grupal',
-    //                     'juego_nombre' => $inscripcion->juego->nombre,
-    //                     'img_id' => $inscripcion->juego->img_id,
-    //                     'equipo_nombre' => $equipo->nombre_equipo,
-    //                     'equipo_id' => $equipo->id,
-    //                     'estado_pago' => $inscripcion->estado_pago,
-    //                 ];
-    //             });
-    //         $inscripcionesGrupales = $inscripcionesGrupales->concat($inscripcionesDelEquipo);
-    //     }
+        // Fusionando las inscripciones
+        $inscripciones = $inscripcionesIndividuales->concat($inscripcionesGrupales);
 
-    //     // Fusionando las inscripciones
-    //     $inscripciones = $inscripcionesIndividuales->concat($inscripcionesGrupales);
-
-    //     // Enviando a la vista
-    //     return Inertia::render('DashboardPage/Inscripciones/MisInscripciones', [
-    //         'role' => $user->hasRole("admin"),
-    //         'inscripciones' => $inscripciones,
-    //     ]);
-    // }
+        // Enviando a la vista
+        return Inertia::render('DashboardPage/Inscripciones/MisInscripciones', [
+            'role' => $role,
+            'inscripciones' => $inscripciones,
+        ]);
+    }
 }
