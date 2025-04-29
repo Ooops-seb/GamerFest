@@ -14,8 +14,7 @@ import logoDark from '@/../../public/images/Logo2025white.webp';
                 <source :srcset="logoLight" media="(prefers-color-scheme: dark)" />
                 <img class="w-98 mx-auto" :src="logoDark" alt="Logo" />
             </picture>
-            <span class="font-cinzel text-wine dark:text-beige text-2xl">Próximamente</span>
-            <span class="font-cinzel text-wine dark:text-beige text-base">Junio 10, 11, 12</span>
+            <span class="font-cinzel text-wine dark:text-beige text-2xl">Próximamente en Junio</span>
         </div>
     </div>
 </template>
