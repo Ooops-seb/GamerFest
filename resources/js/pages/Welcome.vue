@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import logoLight from '@/../../public/images/Logo2025black.webp';
 import logoDark from '@/../../public/images/Logo2025white.webp';
 </script>
