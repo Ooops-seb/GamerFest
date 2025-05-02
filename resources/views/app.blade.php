@@ -5,6 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Favicon para modo claro -->
+    <link rel="icon" href="{{ asset('favicon-light.ico') }}" media="(prefers-color-scheme: light)">
+
+    <!-- Favicon para modo oscuro -->
+    <link rel="icon" href="{{ asset('favicon-dark.ico') }}" media="(prefers-color-scheme: dark)">
+
+
     {{-- Inline script to detect system dark mode preference and apply it immediately --}}
     <script>
         (function () {
@@ -42,6 +49,9 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet" />
 
     @routes()
     @vite(['resources/js/app.ts'])

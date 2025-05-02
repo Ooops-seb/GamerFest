@@ -183,6 +183,9 @@
 }
 
 @theme {
+    --color-black: #070706;
+    --color-gray: #3c3c36;
+    --color-gray-light: #7c7c72;
     --color-beige: #e2d9ca;
     --color-wine: #72211d;
 }
