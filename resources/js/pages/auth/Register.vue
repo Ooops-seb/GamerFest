@@ -38,14 +38,22 @@ const submit = () => {
                         :tabindex="1"
                         autocomplete="name"
                         v-model="form.name"
-                        placeholder="Nombre Apellido"
+                        placeholder="Nombre y apellido"
                     />
                     <InputError :message="form.errors.name" />
                 </div>
 
                 <div class="grid gap-2">
                     <Label for="email">Correo electrónico</Label>
-                    <Input id="email" type="email" required :tabindex="2" autocomplete="email" v-model="form.email" placeholder="email@example.com" />
+                    <Input
+                        id="email"
+                        type="email"
+                        required
+                        :tabindex="2"
+                        autocomplete="email"
+                        v-model="form.email"
+                        placeholder="correo@ejemplo.com"
+                    />
                     <InputError :message="form.errors.email" />
                 </div>
 
@@ -84,8 +92,8 @@ const submit = () => {
             </div>
 
             <div class="text-muted-foreground text-center text-sm">
-                Ya estas registrado?
-                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="6">Inicia Sesión</TextLink>
+                ¿Ya estás registrado?
+                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="6">Inicia sesión</TextLink>
             </div>
         </form>
     </AuthBase>
