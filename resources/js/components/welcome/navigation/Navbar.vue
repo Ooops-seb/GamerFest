@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import { ChevronDown } from 'lucide-vue-next';
 import { ref } from 'vue';
+import { route } from 'ziggy-js';
 import iconLight from '@/../../public/images/Icon2025black.webp';
 import iconDark from '@/../../public/images/Icon2025white.webp';
 
@@ -15,6 +16,33 @@ const toggleMobileDropdown = (section: string) => {
         openMobileDropdown.value = section;
     }
 };
+defineProps({
+    role: {
+        type: Boolean,
+    },
+    canLogin: {
+        type: Boolean,
+    },
+    canRegister: {
+        type: Boolean,
+    },
+    laravelVersion: {
+        type: String,
+        required: true,
+    },
+    phpVersion: {
+        type: String,
+        required: true,
+    },
+    numJuegosSeleccionados: {
+        type: Number,
+        required: true,
+    },
+    juegosInscritos: {
+        type: Array,
+        required: true,
+    }
+});
 
 const navigationItems = [
     {
@@ -44,6 +72,10 @@ const navigationItems = [
     { name: 'SPONSORS', href: '#sponsors' },
     { name: 'GALERÍA', href: '#' },
     { name: 'CONTACTO', href: '#contact' },
+    {
+        name:'Carrito',
+        href: route('carrito'),
+    }
 ];
 </script>
 
@@ -107,13 +139,13 @@ const navigationItems = [
                     <!-- Navegación para pantallas medianas y grandes -->
                     <nav class="hidden lg:flex space-x-1">
                         <template v-for="item in navigationItems" :key="item.name">
-                            <a
+                            <Link
                                 v-if="!item.subItems"
-                                href="#"
+                                href="item.href"
                                 class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a]"
                             >
                                 {{ item.name }}
-                            </a>
+                        </Link>
                             <div v-else class="relative group">
                                 <button
                                     class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a] flex items-center"
@@ -167,6 +199,14 @@ const navigationItems = [
                             >
                                 Register
                             </Link>
+                            <Link :href="route('carrito')"
+                                class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white  dark:text-white-400 glitch" id="cart">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 256 256" class="w-6 h-6">
+                                    <path fill="currentColor"
+                                        d="M225.21 56.31A12 12 0 0 0 216 52H58l-4.27-23.58A20 20 0 0 0 34.05 12H16a12 12 0 0 0 0 24h14.71l24.91 137a28 28 0 0 0 4.07 10.21A32 32 0 1 0 115 196h34a32 32 0 1 0 31-24H83.17a4 4 0 0 1-3.93-3.28L76.92 156H188.1a28 28 0 0 0 27.55-23l12.16-66.86a12 12 0 0 0-2.6-9.83ZM92 204a8 8 0 1 1-8-8a8 8 0 0 1 8 8Zm88 8a8 8 0 1 1 8-8a8 8 0 0 1-8 8Zm12-83.28a4 4 0 0 1-3.9 3.28H72.56L62.38 76h139.24Z" />
+                                </svg>
+                            <span class="cart-item-number">{{ numJuegosSeleccionados }}</span>
+                            </Link>
                         </template>
 
                         <!-- Botón de menú móvil -->
@@ -191,14 +231,13 @@ const navigationItems = [
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col space-y-2">
                         <template v-for="item in navigationItems" :key="item.name">
-                            <a
+                            <Link
                                 v-if="!item.subItems"
                                 :href="item.href"
-                                @click="isMenuOpen = false"
-                                class="text-[#f5f5f0] hover:text-[#c41e3a] px-3 py-2 text-sm font-cinzel font-medium transition-colors duration-200"
+                                class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a]"
                             >
                                 {{ item.name }}
-                            </a>
+                            </Link>
                             <!-- Dropdown móvil -->
                             <div v-else>
                                 <button
