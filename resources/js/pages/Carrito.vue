@@ -59,7 +59,7 @@ const state = reactive<{ juegos: Juego[]; total: number; loading: boolean }>({
 
 const form = useForm({
   user_id: props.auth.user?.id ?? null,
-  juegos: JSON.stringify([]),
+  juegos: [] as number[],
   estado: 'inscrito',
   nro_comprobante: '',
   valor_comprobante: 0.0,

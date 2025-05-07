@@ -23,10 +23,9 @@ Route::get('another', function () {
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
-// Route::get('/carrito', [CarritoController::class, 'index'])
-//     ->middleware('auth')
-//     ->name('carrito');
-Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+});
 
 Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
 
