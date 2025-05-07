@@ -41,7 +41,7 @@ defineProps({
     juegosInscritos: {
         type: Array,
         required: true,
-    }
+    },
 });
 
 const navigationItems = [
@@ -72,10 +72,6 @@ const navigationItems = [
     { name: 'SPONSORS', href: '#sponsors' },
     { name: 'GALERÍA', href: '#' },
     { name: 'CONTACTO', href: '#contact' },
-    {
-        name:'Carrito',
-        href: route('carrito'),
-    }
 ];
 </script>
 
@@ -145,7 +141,7 @@ const navigationItems = [
                                 class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a]"
                             >
                                 {{ item.name }}
-                        </Link>
+                            </Link>
                             <div v-else class="relative group">
                                 <button
                                     class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a] flex items-center"
@@ -199,15 +195,20 @@ const navigationItems = [
                             >
                                 Register
                             </Link>
-                            <Link :href="route('carrito')"
-                                class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white  dark:text-white-400 glitch" id="cart">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 256 256" class="w-6 h-6">
-                                    <path fill="currentColor"
-                                        d="M225.21 56.31A12 12 0 0 0 216 52H58l-4.27-23.58A20 20 0 0 0 34.05 12H16a12 12 0 0 0 0 24h14.71l24.91 137a28 28 0 0 0 4.07 10.21A32 32 0 1 0 115 196h34a32 32 0 1 0 31-24H83.17a4 4 0 0 1-3.93-3.28L76.92 156H188.1a28 28 0 0 0 27.55-23l12.16-66.86a12 12 0 0 0-2.6-9.83ZM92 204a8 8 0 1 1-8-8a8 8 0 0 1 8 8Zm88 8a8 8 0 1 1 8-8a8 8 0 0 1-8 8Zm12-83.28a4 4 0 0 1-3.9 3.28H72.56L62.38 76h139.24Z" />
-                                </svg>
-                            <span class="cart-item-number">{{ numJuegosSeleccionados }}</span>
-                            </Link>
                         </template>
+                        <Link
+                            :href="route('carrito')"
+                            class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white dark:text-white-400 glitch"
+                            id="cart"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 256 256" class="w-6 h-6">
+                                <path
+                                    fill="currentColor"
+                                    d="M225.21 56.31A12 12 0 0 0 216 52H58l-4.27-23.58A20 20 0 0 0 34.05 12H16a12 12 0 0 0 0 24h14.71l24.91 137a28 28 0 0 0 4.07 10.21A32 32 0 1 0 115 196h34a32 32 0 1 0 31-24H83.17a4 4 0 0 1-3.93-3.28L76.92 156H188.1a28 28 0 0 0 27.55-23l12.16-66.86a12 12 0 0 0-2.6-9.83ZM92 204a8 8 0 1 1-8-8a8 8 0 0 1 8 8Zm88 8a8 8 0 1 1 8-8a8 8 0 0 1-8 8Zm12-83.28a4 4 0 0 1-3.9 3.28H72.56L62.38 76h139.24Z"
+                                />
+                            </svg>
+                            <span class="cart-item-number">{{ numJuegosSeleccionados }}</span>
+                        </Link>
 
                         <!-- Botón de menú móvil -->
                         <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden text-[#f5f5f0] hover:text-[#c41e3a] focus:outline-none">
@@ -328,3 +329,17 @@ const navigationItems = [
         </header>
     </div>
 </template>
+<style>
+.cart-item-number {
+    position: absolute;
+    font-size: 10px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0.25em 0.35em;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #db005b;
+    transform: translate(18px, -35px);
+    min-width: 10px;
+}
+</style>
