@@ -14,10 +14,6 @@ const sidebarNavItems: NavItem[] = [
         title: 'Contraseña',
         href: '/settings/password',
     },
-    {
-        title: 'Apariencia',
-        href: '/settings/appearance',
-    },
 ];
 
 interface ZiggyProps {
