@@ -130,7 +130,7 @@
     --card: var(--color-black);
     --card-foreground: hsl(0 0% 98%);
     --popover: var(--color-black);
-    --popover-foreground: 0 0% 98%;
+    --popover-foreground: hsl(0 0% 98%);
     --primary: hsl(0 0% 98%);
     --primary-foreground: hsl(0 0% 9%);
     --secondary: hsl(0 0% 14.9%);
