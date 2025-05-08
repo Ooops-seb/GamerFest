@@ -71,7 +71,7 @@ class RolePermissionsSeeder extends Seeder
         $adminRole->syncPermissions($adminPermissions);
         $jugadorRole->syncPermissions($jugadorPermissions);
 
-        $adminUser = User::query()->create([
+        $adminUser = User::firstOrCreate([
             'name' => 'Admin',
             'email' => 'admin@ooops.dev',
             'password' => Hash::make('admin'),
@@ -79,7 +79,7 @@ class RolePermissionsSeeder extends Seeder
         ]);
         $adminUser->assignRole($adminRole);
 
-        $playerUser = User::query()->create([
+        $playerUser = User::firstOrCreate([
             'name' => 'Jugador',
             'email' => 'test@ooops.dev',
             'password' => Hash::make('jugador'),
