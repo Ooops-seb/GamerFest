@@ -54,6 +54,18 @@ import { ref, watchEffect } from 'vue';
 import CardCheckbox from '../../CardCheckbox.vue';
 import { toast } from 'vue-sonner';
 import { Toaster } from '@/components/ui/sonner';
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    setTimeout(() => {
+        toast('¡Mantente atento a las noticias!', {
+            description: 'Pronto habrá novedades importantes para los participantes.',
+            style: {
+                color: '#fff',
+            },
+        });
+    }, 2000);
+});
 
 defineProps<{
     juegos: {
