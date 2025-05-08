@@ -1,10 +1,13 @@
-<!-- src/Components/JuegosIndividuales.vue -->
 <template>
-    <div class="m-28">
-        <h2 class="section-title">Listado Juegos Individuales</h2>
+    <div class="w-full my-12 mx-28 px-4 flex flex-col justify-center">
+        <h2
+            class="mb-4 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 shadow-[0_2px_4px_rgba(0,0,0,0.5)] relative"
+        >
+            Listado Juegos Individuales
+        </h2>
         <!-- <div class="help-text mb-8">Selecciona los juegos para añadir a tú carrito...</div> -->
         <!-- Depuración: Mostrar el array juegos -->
-        <div class="card_container">
+        <div class="w-full flex flex-wrap gap-4 justify-center">
             <div v-for="juego in juegos" :key="juego.id">
                 <div class="flex flex-col items-center mb-4">
                     <CardCheckbox
@@ -17,22 +20,16 @@
                         @selectionChange="handleSelectionChange"
                         @showAlert="showAlert"
                     />
-                    <!-- <a
-                        class="mt-5 px-2 py-1 bg-[#1c1c1a] text-[#e2d9ca] rounded border border-[#7c7c72] hover:bg-[#72211d] hover:border-[#e2d9ca] hover:shadow-[0_0_15px_rgba(114,33,29,0.5)] transition-all duration-500 text-xs uppercase tracking-wider relative overflow-hidden group/btn"
-                        :href="`/pdf/${juego.img_id}.pdf`"
-                        target="_blank"
-                    >
-                        <span class="relative z-10">Ver Reglamento</span>
-                        <span
-                            class="absolute inset-0 bg-gradient-to-r from-[#72211d]/80 to-[#72211d] transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"
-                        ></span>
-                    </a> -->
                 </div>
             </div>
         </div>
-        <h2 class="section-title">Listado Juegos Grupales</h2>
+        <h2
+            class="mt-4 mx-2 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 shadow-[0_2px_4px_rgba(0,0,0,0.5)] relative"
+        >
+            Listado Juegos Grupales
+        </h2>
         <!-- <div class="help-text mb-8">Selecciona algún juego grupal, únicamente es necesario la inscripción del capitan...</div> -->
-        <div class="card_container">
+        <div class="w-full flex flex-wrap gap-4 justify-center">
             <div v-for="juego in juegosGrupo" :key="juego.id">
                 <div class="flex flex-col items-center mb-4">
                     <CardCheckbox
@@ -45,16 +42,6 @@
                         @selectionChange="handleSelectionChange"
                         @showAlert="showAlert"
                     />
-                    <!-- <a
-                        class="mt-5 px-2 py-1 bg-[#1c1c1a] text-[#e2d9ca] rounded border border-[#7c7c72] hover:bg-[#72211d] hover:border-[#e2d9ca] hover:shadow-[0_0_15px_rgba(114,33,29,0.5)] transition-all duration-500 text-xs uppercase tracking-wider relative overflow-hidden group/btn"
-                        :href="`/pdf/${juego.img_id}.pdf`"
-                        target="_blank"
-                    >
-                        <span class="relative z-10">Ver Reglamento</span>
-                        <span
-                            class="absolute inset-0 bg-gradient-to-r from-[#72211d]/80 to-[#72211d] transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"
-                        ></span>
-                    </a> -->
                 </div>
             </div>
         </div>
@@ -101,17 +88,13 @@ const showAlert = (gameName: string, gameId: number) => {
     if (index > -1) {
         toast('Juego añadido al carrito!', {
             description: `Haz agregado ${gameName}.`,
-
+            style: {
+                color: '#fff',
+            },
             actionButtonStyle: {
                 backgroundColor: '#218838',
                 color: '#e2d9ca',
             },
-            // action: {
-            //     label: 'Ver carrito',
-            //     onClick: () => {
-            //         window.location.href = '/carrito';
-            //     },
-            // },
         });
     } else {
         toast('Juego removido del carrito!', {
@@ -132,31 +115,3 @@ const handleSelectionChange = (selected: boolean) => {
     }
 };
 </script>
-
-<style scoped>
-.section-title {
-    position: relative;
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #72211d;
-    text-align: center;
-    font-family: 'Times New Roman', serif;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-}
-.help-text {
-    position: relative;
-    display: inline-block;
-    animation: title-glow 3s ease-in-out infinite;
-    color: #e2d9ca;
-}
-.card_container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-</style>
