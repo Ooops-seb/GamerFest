@@ -37,7 +37,6 @@ interface PageProps {
 }
 
 const props = usePage<PageProps>().props as PageProps;
-const phpVersion = '8.1'; // Define the PHP version here
 
 const equipos = ref<Equipo[]>([]);
 const juegosInscritos = ref<Juego[]>(JSON.parse(localStorage.getItem('juegosInscritos') ?? '[]'));
@@ -414,14 +413,7 @@ onMounted(() => {
     <Head title="Carrito de Compras" />
 
     <div class="fixed top-0 left-0 w-full navbar-container animate__animated animate__fadeInDown">
-        <Navbar
-            :can-login="false"
-            :can-register="false"
-            :laravel-version="'8.x'"
-            :php-version="phpVersion"
-            :num-juegos-seleccionados="numJuegosSeleccionados"
-            :juegos-inscritos="juegosInscritos"
-        >
+        <Navbar :can-login="false" :can-register="false" :num-juegos-seleccionados="numJuegosSeleccionados" :juegos-inscritos="juegosInscritos">
         </Navbar>
         <ul v-for="juego in state.juegos" :key="juego.id"></ul>
     </div>

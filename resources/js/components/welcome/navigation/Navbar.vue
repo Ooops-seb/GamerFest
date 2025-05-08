@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+// import { Link } from '@inertiajs/vue3';
 import { ChevronDown } from 'lucide-vue-next';
 import { ref } from 'vue';
-import { route } from 'ziggy-js';
+// import { route } from 'ziggy-js';
 import iconLight from '@/../../public/images/Icon2025black.webp';
 import iconDark from '@/../../public/images/Icon2025white.webp';
 
@@ -36,33 +36,39 @@ defineProps({
     },
 });
 
-const navigationItems = [
+type NavigationItems = {
+    name: string;
+    href: string;
+    subItems?: { name: string; href: string }[];
+};
+
+const navigationItems: NavigationItems[] = [
     {
         name: 'INICIO',
         href: '#',
     },
-    {
-        name: 'EVENTOS',
-        href: '#',
-        subItems: [
-            { name: 'Conferencias', href: '#' },
-            { name: 'Exhibiciones', href: '#' },
-            { name: 'Talleres', href: '#' },
-            { name: 'Calendario', href: '#' },
-        ],
-    },
-    {
-        name: 'TORNEOS',
-        href: '#',
-        subItems: [
-            { name: 'League of Legends', href: '#' },
-            { name: 'Valorant', href: '#' },
-            { name: 'CS:GO', href: '#' },
-            { name: 'Fortnite', href: '#' },
-        ],
-    },
+    // {
+    //     name: 'EVENTOS',
+    //     href: '#',
+    //     subItems: [
+    //         { name: 'Conferencias', href: '#' },
+    //         { name: 'Exhibiciones', href: '#' },
+    //         { name: 'Talleres', href: '#' },
+    //         { name: 'Calendario', href: '#' },
+    //     ],
+    // },
+    // {
+    //     name: 'TORNEOS',
+    //     href: '#',
+    //     subItems: [
+    //         { name: 'League of Legends', href: '#' },
+    //         { name: 'Valorant', href: '#' },
+    //         { name: 'CS:GO', href: '#' },
+    //         { name: 'Fortnite', href: '#' },
+    //     ],
+    // },
     { name: 'SPONSORS', href: '#sponsors' },
-    { name: 'GALERÍA', href: '#' },
+    // { name: 'GALERÍA', href: '#' },
     { name: 'CONTACTO', href: '#contact' },
 ];
 </script>
@@ -127,13 +133,13 @@ const navigationItems = [
                     <!-- Navegación para pantallas medianas y grandes -->
                     <nav class="hidden lg:flex space-x-1">
                         <template v-for="item in navigationItems" :key="item.name">
-                            <Link
+                            <a
                                 v-if="!item.subItems"
-                                href="item.href"
+                                :href="item.href"
                                 class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a]"
                             >
                                 {{ item.name }}
-                            </Link>
+                            </a>
                             <div v-else class="relative group">
                                 <button
                                     class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a] flex items-center"
@@ -167,7 +173,7 @@ const navigationItems = [
 
                     <!-- Botones de autenticación -->
                     <div class="flex items-center space-x-4">
-                        <Link
+                        <!-- <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"
                             class="hidden md:inline-block dark:text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
@@ -187,7 +193,7 @@ const navigationItems = [
                             >
                                 Register
                             </Link>
-                        </template>
+                        </template> -->
                         <!-- <Link
                             :href="route('carrito')"
                             class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white dark:text-white-400 glitch"
@@ -224,13 +230,13 @@ const navigationItems = [
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col space-y-2">
                         <template v-for="item in navigationItems" :key="item.name">
-                            <Link
+                            <a
                                 v-if="!item.subItems"
                                 :href="item.href"
                                 class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a]"
                             >
                                 {{ item.name }}
-                            </Link>
+                            </a>
                             <!-- Dropdown móvil -->
                             <div v-else>
                                 <button
@@ -258,14 +264,14 @@ const navigationItems = [
                         </template>
 
                         <!-- Botones de autenticación móvil -->
-                        <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10 flex space-x-4">
+                        <!-- <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10 flex space-x-4">
                             <Link
                                 v-if="$page.props.auth.user"
                                 :href="route('dashboard')"
                                 @click="isMenuOpen = false"
                                 class="text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                             >
-                                Registrarse
+                                Dashboard
                             </Link>
                             <template v-else>
                                 <Link
@@ -283,7 +289,7 @@ const navigationItems = [
                                     Registrarse
                                 </Link>
                             </template>
-                        </div>
+                        </div> -->
 
                         <!-- Redes sociales móvil -->
                         <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10">
