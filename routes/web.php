@@ -28,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
 // EQUIPO
 Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
 Route::get('/equipos', [EquipoController::class, 'index']);
-Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])->name('mis_equipos');
+// Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])->name('mis_equipos');
 Route::get('/equipos/{id}', [EquipoController::class, 'show']);
 Route::get('/equipos/{id}/miembros', [EquipoController::class, 'getMiembros']);
 Route::post('/equipos', [EquipoController::class, 'store']);
@@ -43,5 +43,5 @@ Route::post('/guardar_all_inscripciones', [\App\Http\Controllers\InscripcionIndi
 
 
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+// require __DIR__ . '/settings.php';
+// require __DIR__ . '/auth.php';
