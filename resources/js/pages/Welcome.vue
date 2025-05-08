@@ -25,7 +25,7 @@ defineProps({
         id="nav"
         class="flex min-h-screen flex-col items-center justify-center bg-beige bg-[url('/public/images/texture.webp')] dark:bg-none pb-6 text-[#1b1b18] lg:pb-8 dark:bg-black"
     >
-        <Navbar :laravelVersion="'10.0'" :phpVersion="'8.1'" :numJuegosSeleccionados="0" :juegosInscritos="[]"></Navbar>
+        <Navbar :numJuegosSeleccionados="0" :juegosInscritos="[]"></Navbar>
         <div class="my-8 flex flex-col items-center justify-center opacity-100 transition-opacity duration-750 starting:opacity-0">
             <picture class="select-none pointer-events-none">
                 <source :srcset="logoLight" media="(prefers-color-scheme: dark)" />

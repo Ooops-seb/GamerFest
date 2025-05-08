@@ -17,9 +17,6 @@ use App\Http\Controllers\InscripcionIndividualController;
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('another', function () {
-    return Inertia::render('Another');
-})->middleware(['auth', 'verified'])->name('another');
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
@@ -40,7 +37,7 @@ Route::delete('/equipos/{id}', [EquipoController::class, 'destroy']);
 Route::put('/equipos/{id}', [EquipoController::class, 'update']);
 
 
-Route::post('/get_inscripciones_by_game', [InscripcionIndividualController::class, 'get_inscripciones_by_game']); 
+Route::post('/get_inscripciones_by_game', [InscripcionIndividualController::class, 'get_inscripciones_by_game']);
 Route::post('/guardar_all_inscripciones', [\App\Http\Controllers\InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
 
 

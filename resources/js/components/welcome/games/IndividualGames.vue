@@ -58,13 +58,15 @@
                 </div>
             </div>
         </div>
-        <AlertComponent v-if="isAlertVisible" :message="alertMessage" />
+        <Toaster />
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import CardCheckbox from '../../CardCheckbox.vue';
+import { toast } from 'vue-sonner';
+import { Toaster } from '@/components/ui/sonner';
 
 defineProps<{
     juegos: {
@@ -83,9 +85,6 @@ defineProps<{
     }[];
 }>();
 
-const isAlertVisible = ref(false);
-const alertMessage = ref('');
-
 const juegosInscritos = ref(JSON.parse(localStorage.getItem('juegosInscritos') || '[]'));
 const numJuegosSeleccionados = ref(juegosInscritos.value.length);
 
@@ -99,10 +98,30 @@ const showAlert = (gameName: string, gameId: number) => {
     const juegos = JSON.parse(localStorage.getItem('juegosInscritos') || '[]') as { id: number }[];
     const index = juegos.findIndex((j: { id: number }) => j.id === gameId);
 
-    alertMessage.value = index > -1 ? `Se agregó el juego ${gameName} al carrito.` : `Se eliminó el juego ${gameName} del carrito.`;
+    if (index > -1) {
+        toast('Juego añadido al carrito!', {
+            description: `Haz agregado ${gameName}.`,
 
-    isAlertVisible.value = true;
-    setTimeout(() => (isAlertVisible.value = false), 3000);
+            actionButtonStyle: {
+                backgroundColor: '#218838',
+                color: '#e2d9ca',
+            },
+            // action: {
+            //     label: 'Ver carrito',
+            //     onClick: () => {
+            //         window.location.href = '/carrito';
+            //     },
+            // },
+        });
+    } else {
+        toast('Juego removido del carrito!', {
+            style: {
+                backgroundColor: '#72211d',
+                color: '#e2d9ca',
+            },
+            description: `Haz eliminado ${gameName}.`,
+        });
+    }
 };
 
 const handleSelectionChange = (selected: boolean) => {
