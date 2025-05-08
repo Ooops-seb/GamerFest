@@ -93,10 +93,9 @@ class JuegoController extends Controller
             return $juego['id'];
         }, $juegosInscritos);
 
-        // obtener los detalles de los juegos inscritos
         $juegos = Juego::findMany($idsJuegosInscritos);
-        // calcular el total de los juegos
-        $total = $juegos->sum('costo_inscripcion');   // remplaza 'precio' con el nombre de tu campo de precio
+        $total = $juegos->sum('costo_inscripcion');
+
         return response()->json([
             'juegos' => $juegos,
             'total' => $total,

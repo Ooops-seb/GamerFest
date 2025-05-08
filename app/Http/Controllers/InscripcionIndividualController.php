@@ -91,6 +91,7 @@ class InscripcionIndividualController extends Controller
 
     public function guardar_all_inscripciones(Request $request)
     {
+        // dd($request->all());
         try {
             $data = $request->validate([
                 'user_id' => 'required|integer',
@@ -114,6 +115,11 @@ class InscripcionIndividualController extends Controller
             }
 
             $arrayJuegos = json_decode($data['juegos']);
+
+            if (!is_array($arrayJuegos)) {
+                return response()->json(['message' => 'Error al decodificar los juegos'], 400);
+            }
+            
 
             foreach ($arrayJuegos as $juego) {
                 $juegoData = [
@@ -147,9 +153,10 @@ class InscripcionIndividualController extends Controller
 
                 // Verificar si es una nueva instancia de inscripción
                 if (!$inscripcion->exists) {
-                    // Asignar la ruta del comprobante de pago solo para nuevas instancias
                     $inscripcion->comprobante_pago = $path;
-                }
+                    $inscripcion->estado = 'inscrito'; // ✅ aquí está el valor faltante
+                }        
+                
 
                 // Asignar el número de comprobante a todas las instancias
                 $inscripcion->nro_comprobante = $data['nro_comprobante'];
@@ -166,8 +173,15 @@ class InscripcionIndividualController extends Controller
                 'message' => 'Inscripcion creada exitosamente'
             ], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => "Error al crear la inscripcion: " . $e->getMessage()], 500);
+            \Log::error('Error en guardar_all_inscripciones', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['message' => "Error al crear la inscripción"], 500);
         }
+        
     }
 
     public function get_inscripciones_by_game(Request $request)
