@@ -5,6 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Favicon para modo claro -->
+    <link rel="icon" href="{{ asset('favicon-light.ico') }}" media="(prefers-color-scheme: light)">
+
+    <!-- Favicon para modo oscuro -->
+    <link rel="icon" href="{{ asset('favicon-dark.ico') }}" media="(prefers-color-scheme: dark)">
+
+
     {{-- Inline script to detect system dark mode preference and apply it immediately --}}
     <script>
         (function () {
@@ -23,7 +30,9 @@
     <script>
         window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
+    @if (env('APP_ENV') === 'production')
+        <script defer src="/_vercel/insights/script.js"></script>
+    @endif
 
     {{-- Inline style to set the HTML background color based on our theme in app.css --}}
     <style>
@@ -38,9 +47,11 @@
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet" />
 
     @routes()
     @vite(['resources/js/app.ts'])

@@ -12,24 +12,25 @@ createServer((page) =>
         page,
         render: renderToString,
         title: (title) => `${title} - ${appName}`,
-        resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob('./pages/**/*.vue')),
+        resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob('./pages/**/*.vue')) as any,
         setup({ App, props, plugin }) {
             const app = createSSRApp({ render: () => h(App, props) });
 
             // Configure Ziggy for SSR...
             const ziggyConfig = {
-                ...page.props.ziggy,
-                location: new URL(page.props.ziggy.location),
+                ...(page.props.ziggy as { location: string }),
+                location: new URL((page.props.ziggy as { location: string }).location),
             };
 
             // Create route function...
             const route = (name: string, params?: any, absolute?: boolean) => ziggyRoute(name, params, absolute, ziggyConfig);
 
             // Make route function available globally...
-            app.config.globalProperties.route = route;
+            app.config.globalProperties.route = route as any;
 
             // Make route function available globally for SSR...
             if (typeof window === 'undefined') {
+                // @ts-expect-error: Ignore global type warning for SSR route
                 global.route = route;
             }
 

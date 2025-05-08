@@ -1,4 +1,4 @@
-import { RouteParams, Router } from 'ziggy-js';
+import { RouteParams, Router } from '@/../../utils/ziggy';
 
 declare global {
     function route(): Router;

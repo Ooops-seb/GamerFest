@@ -7,7 +7,7 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { initializeTheme } from './composables/useAppearance';
 
-// Extend ImportMeta interface for Vite...
+// @ts-expect-error: Suppress vite/client warning
 declare module 'vite/client' {
     interface ImportMetaEnv {
         readonly VITE_APP_NAME: string;
@@ -32,7 +32,7 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#72211d',
     },
 });
 
