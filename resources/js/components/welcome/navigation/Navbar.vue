@@ -196,7 +196,7 @@ const navigationItems = [
                                 Register
                             </Link>
                         </template>
-                        <Link
+                        <!-- <Link
                             :href="route('carrito')"
                             class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white dark:text-white-400 glitch"
                             id="cart"
@@ -208,7 +208,7 @@ const navigationItems = [
                                 />
                             </svg>
                             <span class="cart-item-number">{{ numJuegosSeleccionados }}</span>
-                        </Link>
+                        </Link> -->
 
                         <!-- Botón de menú móvil -->
                         <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden text-[#f5f5f0] hover:text-[#c41e3a] focus:outline-none">

@@ -85,7 +85,20 @@ const addMember = () => {
         miembros.value.push(formEquipo.miembro);
         formEquipo.miembro = '';
     } else if (miembros.value.length >= numeroMaxJugadores) {
-        Swal.fire('¡Oops!', 'Has alcanzado el límite de miembros del equipo', 'error');
+        Swal.fire({
+            title: 'Máximo de miembros alcanzado',
+            text: `El equipo ya tiene el máximo de ${numeroMaxJugadores} miembros.`,
+            icon: 'warning',
+            background: '#1a1a1a',
+            color: '#f5f5f5',
+            iconColor: '#c41e3a',
+            customClass: {
+                popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                title: 'text-xl font-bold font-cinzel',
+                htmlContainer: 'text-sm font-light',
+                confirmButton: 'text-sm px-6 py-2',
+            },
+        });
     }
 };
 
@@ -102,14 +115,40 @@ const createTeam = async () => {
 
     try {
         await axios.post('/equipos', formData);
-        Swal.fire('Equipo creado', 'El equipo fue creado con éxito!', 'success');
+        Swal.fire({
+            title: 'Equipo creado',
+            text: 'El equipo ha sido creado correctamente!',
+            icon: 'success',
+            background: '#1a1a1a',
+            color: '#f5f5f5',
+            iconColor: '#00ffcc',
+            customClass: {
+                popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                title: 'text-xl font-bold font-cinzel',
+                htmlContainer: 'text-sm font-light',
+                confirmButton: 'text-sm px-6 py-2',
+            },
+        });
         formEquipo.reset();
         miembros.value = [];
         closeModal();
         recuperarEquipos();
     } catch (error) {
         console.error('Error al crear el equipo:', error);
-        Swal.fire('Error', 'Hubo un error al crear el equipo', 'error');
+        Swal.fire({
+            title: 'Error',
+            text: 'Hubo un error al crear el equipo',
+            icon: 'error',
+            background: '#1a1a1a',
+            color: '#f5f5f5',
+            iconColor: '#00ffcc',
+            customClass: {
+                popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                title: 'text-xl font-bold font-cinzel',
+                htmlContainer: 'text-sm font-light',
+                confirmButton: 'text-sm px-6 py-2',
+            },
+        });
     }
 };
 
@@ -124,7 +163,20 @@ const updateTeam = async () => {
 
     try {
         await axios.put(`/equipos/${data.id}`, data);
-        Swal.fire('Equipo actualizado', 'Actualizado correctamente!', 'success');
+        Swal.fire({
+            title: 'Equipo actualizado',
+            text: 'El equipo ha sido actualizado correctamente!',
+            icon: 'success',
+            background: '#1a1a1a',
+            color: '#f5f5f5',
+            iconColor: '#00ffcc',
+            customClass: {
+                popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                title: 'text-xl font-bold font-cinzel',
+                htmlContainer: 'text-sm font-light',
+                confirmButton: 'text-sm px-6 py-2',
+            },
+        });
         formEquipo.reset();
         miembros.value = [];
         closeModal();
@@ -196,11 +248,33 @@ const removeJuego = (index: number) => {
         showCancelButton: true,
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar',
+        background: '#1a1a1a',
+        color: '#f5f5f5',
+        iconColor: '#00ffcc',
+        confirmButtonColor: '#c41e3a',
+        customClass: {
+            popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+            title: 'text-xl font-bold font-cinzel',
+            htmlContainer: 'text-sm font-light',
+            confirmButton: 'text-sm px-6 py-2',
+        },
     }).then((result) => {
         if (result.isConfirmed) {
             state.juegos.splice(index, 1);
             localStorage.setItem('juegosInscritos', JSON.stringify(state.juegos));
-            Swal.fire('Eliminado', 'El juego ha sido eliminado.', 'success');
+            Swal.fire({
+                title: 'Eliminado',
+                text: 'El juego ha sido eliminado.',
+                icon: 'success',
+                background: '#1a1a1a',
+                color: '#f5f5f5',
+                iconColor: '#00ffcc',
+                customClass: {
+                    popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                    title: 'text-xl font-bold font-cinzel',
+                    htmlContainer: 'text-sm font-light',
+                },
+            });
             getTotal();
         }
     });
@@ -223,13 +297,41 @@ const submitForm = async () => {
         comprobante_pago = fileInput?.files?.[0] || null;
 
         if (!nro_comprobante) {
-            Swal.fire('Error', 'Es necesario el número de comprobante', 'error');
+            Swal.fire({
+                title: 'Error',
+                text: 'Es necesario ingresar el número de comprobante',
+                icon: 'error',
+                background: '#1a1a1a',
+                color: '#f5f5f5',
+                iconColor: '#c41e3a',
+                confirmButtonColor: '#c41e3a',
+                customClass: {
+                    popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                    title: 'text-xl font-bold font-cinzel',
+                    htmlContainer: 'text-sm font-light',
+                    confirmButton: 'text-sm px-6 py-2',
+                },
+            });
             form.loading = false;
             return;
         }
 
         if (!comprobante_pago) {
-            Swal.fire('Error', 'Es necesario subir la foto del comprobante', 'error');
+            Swal.fire({
+                title: 'Error',
+                text: 'Es necesario subir el comprobante de pago',
+                icon: 'error',
+                background: '#1a1a1a',
+                color: '#f5f5f5',
+                iconColor: '#c41e3a',
+                confirmButtonColor: '#c41e3a',
+                customClass: {
+                    popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                    title: 'text-xl font-bold font-cinzel',
+                    htmlContainer: 'text-sm font-light',
+                    confirmButton: 'text-sm px-6 py-2',
+                },
+            });
             form.loading = false;
             return;
         }
@@ -283,7 +385,20 @@ const submitForm = async () => {
     } catch (error) {
         let msg = 'Error inesperado al crear la inscripción';
         if (axios.isAxiosError(error) && error.response) msg = error.response.data.message;
-        Swal.fire('Error', msg, 'error');
+        Swal.fire({
+            title: 'Error',
+            text: msg,
+            icon: 'error',
+            background: '#1a1a1a',
+            color: '#f5f5f5',
+            iconColor: '#c41e3a',
+            customClass: {
+                popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                title: 'text-xl font-bold font-cinzel',
+                htmlContainer: 'text-sm font-light',
+                confirmButton: 'text-sm px-6 py-2',
+            },
+        });
     } finally {
         form.loading = false;
     }

@@ -27,7 +27,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
 });
 
+
+// EQUIPO
 Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
+Route::get('/equipos', [EquipoController::class, 'index']);
+Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])->name('mis_equipos');
+Route::get('/equipos/{id}', [EquipoController::class, 'show']);
+Route::get('/equipos/{id}/miembros', [EquipoController::class, 'getMiembros']);
+Route::post('/equipos', [EquipoController::class, 'store']);
+Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
+Route::delete('/equipos/{id}', [EquipoController::class, 'destroy']);
+Route::put('/equipos/{id}', [EquipoController::class, 'update']);
+
 
 Route::post('/get_inscripciones_by_game', [InscripcionIndividualController::class, 'get_inscripciones_by_game']); 
 Route::post('/guardar_all_inscripciones', [\App\Http\Controllers\InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
