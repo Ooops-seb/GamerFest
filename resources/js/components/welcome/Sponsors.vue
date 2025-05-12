@@ -8,7 +8,7 @@
             </h1>
 
             <!-- Contenedor de sponsors con diseño de pergamino antiguo -->
-            <div class="overflow-hidden bg-black/90 mt-10 py-10 px-6 shadow-[0_0_15px_rgba(124,124,114,0.3)]">
+            <div class="overflow-hidden mt-10 py-10 px-6">
                 <!-- Elementos decorativos de esquina estilo Assassin's Creed -->
                 <div class="absolute top-0 left-0 w-16 h-16 border-t border-l border-wine/70"></div>
                 <div class="absolute bottom-0 right-0 w-16 h-16 border-b border-r border-wine/70"></div>
