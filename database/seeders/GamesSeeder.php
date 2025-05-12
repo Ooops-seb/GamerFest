@@ -47,7 +47,7 @@ class GamesSeeder extends Seeder
                 'img_id' => 'lol',
             ],
             [
-                'nombre' => 'Valoran',
+                'nombre' => 'Valorant',
                 'genero' => 'FPS',
                 'costo_inscripcion' => 25.00,
                 'fecha_limite_inscripcion' => '2025-06-02',
