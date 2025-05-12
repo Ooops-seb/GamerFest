@@ -1,8 +1,6 @@
 <template>
     <div class="w-full my-12 mx-28 px-4 flex flex-col justify-center">
-        <h2
-            class="mb-4 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 shadow-[0_2px_4px_rgba(0,0,0,0.5)] relative"
-        >
+        <h2 class="mb-4 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 relative">
             Listado Juegos Individuales
         </h2>
         <!-- <div class="help-text mb-8">Selecciona los juegos para añadir a tú carrito...</div> -->
@@ -23,9 +21,7 @@
                 </div>
             </div>
         </div>
-        <h2
-            class="mt-4 mx-2 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 shadow-[0_2px_4px_rgba(0,0,0,0.5)] relative"
-        >
+        <h2 class="mt-4 mx-2 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 relative">
             Listado Juegos Grupales
         </h2>
         <!-- <div class="help-text mb-8">Selecciona algún juego grupal, únicamente es necesario la inscripción del capitan...</div> -->
@@ -54,6 +50,15 @@ import { ref, watchEffect } from 'vue';
 import CardCheckbox from '../../CardCheckbox.vue';
 import { toast } from 'vue-sonner';
 import { Toaster } from '@/components/ui/sonner';
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    setTimeout(() => {
+        toast('¡Mantente atento a las noticias!', {
+            description: 'Pronto habrá novedades importantes para los participantes.',
+        });
+    }, 2000);
+});
 
 defineProps<{
     juegos: {
@@ -88,9 +93,6 @@ const showAlert = (gameName: string, gameId: number) => {
     if (index > -1) {
         toast('Juego añadido al carrito!', {
             description: `Haz agregado ${gameName}.`,
-            style: {
-                color: '#fff',
-            },
             actionButtonStyle: {
                 backgroundColor: '#218838',
                 color: '#e2d9ca',
