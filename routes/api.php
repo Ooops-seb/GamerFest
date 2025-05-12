@@ -79,6 +79,6 @@ Route::middleware(['auth:sanctum', 'checkrole:admin'])->group(function () {
     Route::put('/juegos/{id}', [JuegoController::class, 'update']);
 
 
-
+/*-------------------------------------Sponsors---------------------------------------------*/
 });
 
