@@ -16,6 +16,10 @@ defineProps({
         type: Array as () => { id: number; nombre: string; costo_inscripcion: number; img_id: string; estaInscrito: boolean }[],
         default: () => [],
     },
+    sponsors: {
+        type: Array as () => { id: number; url_pagina: string; url_imagen: string; nombre: string }[],
+        default: () => [],
+    },
 });
 </script>
 
@@ -34,7 +38,7 @@ defineProps({
             <span class="font-cinzel text-wine dark:text-beige text-2xl select-none">Próximamente en Junio</span>
         </div>
         <JuegosIndividuales :juegos="juegosIndividual" :juegosGrupo="juegosGrupo" />
-        <Sponsors></Sponsors>
+        <Sponsors :sponsors="sponsors" />
         <Footer></Footer>
     </div>
 </template>
