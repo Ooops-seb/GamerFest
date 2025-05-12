@@ -2,7 +2,7 @@
     <section v-if="sponsors && sponsors.length > 0" id="sponsors" class="py-8 w-full text-beige">
         <div class="container mx-auto px-4">
             <!-- Título principal con estilo antiguo/pergamino -->
-            <h1 class="text-3xl md:text-4xl font-bold text-center mb-12 text-wine tracking-wider relative">
+            <h1 class="text-3xl md:text-4xl font-bold text-center mb-12 text-wine tracking-wider relative font-cinzel">
                 SPONSORS
                 <span class="block h-1 w-24 bg-wine mx-auto mt-2"></span>
             </h1>
@@ -16,28 +16,28 @@
                 <div class="absolute bottom-0 left-0 w-16 h-16 border-b border-l border-wine/70"></div>
 
                 <!-- Subtítulo con estilo antiguo -->
-                <div class="text-center text-gray-light mb-12 font-light">Organizaciones que hacen posible este torneo</div>
+                <div class="text-center text-gray-light mb-12 font-cinzel font-light">Organizaciones que hacen posible este torneo</div>
 
                 <!-- Grid de sponsors con nuevo layout -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-1 justify-items-center">
                     <div v-for="sponsor in sponsors" :key="sponsor.id" class="group">
-                        <a :href="sponsor.url_pagina" target="_blank" class="block transition-all duration-300 hover:scale-105">
+                        <Link :href="sponsor.url_pagina" target="_blank" class="block transition-all duration-300 hover:scale-105">
                             <div class="sponsor-card">
                                 <div class="sponsor-border"></div>
                                 <div class="sponsor-content">
                                     <img
                                         :src="`/images/sponsors/${sponsor.url_imagen}`"
                                         :alt="sponsor.nombre"
-                                        class="w-full h-auto relative z-10 transition-all duration-300 group-hover:brightness-110"
+                                        class="w-full h-auto relative z-10 transition-all duration-300 group-hover:brightness-110 mx-auto"
                                     />
                                 </div>
                             </div>
                             <div
-                                class="mb-2 text-center text-wine font-medium tracking-wide opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                                class="font-cinzel mb-2 text-center dark:text-white font-medium tracking-wide opacity-80 group-hover:opacity-100 transition-opacity duration-300"
                             >
                                 {{ sponsor.nombre }}
                             </div>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 interface Sponsor {
     id: number;
