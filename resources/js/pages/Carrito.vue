@@ -359,7 +359,7 @@ const submitForm = async () => {
 
         if (!confirm.isConfirmed) return;
     }
-
+    // Removed unused variable isDarkMode
     try {
         await axios.post('/guardar_all_inscripciones', formData);
         Swal.fire({
@@ -420,7 +420,7 @@ onMounted(() => {
         <div class="max-w-xl mx-auto">
             <div
                 v-if="!state.loading || juegosInscritos.length == 0"
-                class="ac-container transition-all duration-500 ease-in-out transform hover:scale-[1.01]"
+                class="ac-container bg-gray-50 dark:bg-[#000000] transition-all duration-500 ease-in-out transform hover:scale-[1.01]"
                 style="margin-top: 140px"
             >
                 <div class="ac-header">
@@ -455,12 +455,12 @@ onMounted(() => {
                                             <span class="ac-button-text">Editar equipo</span>
                                         </button>
                                         <button v-else @click="openModal(juego.id)" class="ac-button ac-button-create">
-                                            <span class="ac-button-text">Crear equipo</span>
+                                            <span class="ac-button-text text-black dark:text-white">Crear equipo</span>
                                         </button>
                                     </div>
 
-                                    <div class="inline-flex items-center text-base font-semibold text-ac-beige">
-                                        <span class="ac-price">$ {{ juego.costo_inscripcion }}</span>
+                                    <div class="inline-flex items-center text-sm font-bold text-ac-beige">
+                                        <span class="ac-price dark:text-white">$ {{ juego.costo_inscripcion }}</span>
                                     </div>
                                     <div class="inline-flex items-center text-base font-semibold">
                                         <button @click="removeJuego(index)" class="ac-delete-button group">
@@ -468,7 +468,7 @@ onMounted(() => {
                                                 <i
                                                     class="fa-solid fa-trash ac-delete-icon group-hover:text-ac-wine transition-colors duration-300"
                                                 ></i>
-                                                <span class="ac-delete-message">Eliminar</span>
+                                                <span class="ac-delete-message text-black dark:text-white">Eliminar</span>
                                             </div>
                                         </button>
                                     </div>
@@ -547,9 +547,9 @@ onMounted(() => {
                     </Modal>
 
                     <div class="ac-total-container">
-                        <strong class="text-ac-beige">Total: </strong>
+                        <strong class="text-ac-beige text-black dark:text-white">Total: </strong>
                         <span class="text-ac-beige text-base"
-                            >$<span class="ac-total-amount">{{ state.total.toFixed(2) }}</span></span
+                            >$<span class="ac-total-amount text-black dark:text-white">{{ state.total.toFixed(2) }}</span></span
                         >
                     </div>
 
@@ -581,7 +581,7 @@ onMounted(() => {
                                 </div>
                                 <div v-else class="flex items-center">
                                     <i class="fa-regular fa-folder" style="padding-right: 5px"></i>
-                                    <span class="text-xs">SUBIR ARCHIVO</span>
+                                    <span class="text-xs text-black dark:text-white">SUBIR ARCHIVO</span>
                                 </div>
                             </label>
                         </div>
@@ -595,7 +595,7 @@ onMounted(() => {
                             <span v-else>Cargando...</span>
                         </PrimaryButton>
                         <div v-if="state.total !== 0" class="text-ac-beige text-bold ac-account-info">
-                            <span class="text-sm"
+                            <span class="text-sm text-black dark:text-white"
                                 >Es necesario realizar el deposito a la cuenta: xxxxxxxxxx Titular: Pablito Pablito Pablito Pablito - Banco Pichincha
                                 - CI: xxxxxxxxxx</span
                             >
@@ -622,12 +622,6 @@ onMounted(() => {
     --color-wine: #72211d;
 }
 
-body {
-    background-color: var(--color-black);
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233c3c36' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-    background-attachment: fixed;
-}
-
 body::before {
     content: '';
     position: fixed;
@@ -643,7 +637,6 @@ body::before {
 
 /* Assassin's Creed Container */
 .ac-container {
-    background-color: rgba(7, 7, 6, 0.9);
     border: 1px solid var(--color-gray);
     border-radius: 0;
     box-shadow: 0 0 20px rgba(226, 217, 202, 0.1);
@@ -674,7 +667,7 @@ body::before {
 }
 
 .ac-title {
-    color: var(--color-beige);
+    color: var(--color-wine);
     font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -744,7 +737,7 @@ li:hover .ac-game-title::after {
     background-color: transparent;
     color: var(--color-beige);
     border: 1px solid var(--color-gray);
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 0.2rem;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -788,7 +781,6 @@ li:hover .ac-game-title::after {
 
 .ac-price {
     font-family: 'Courier New', monospace;
-    color: var(--color-beige);
     font-weight: 700;
     text-shadow: 0 0 5px rgba(226, 217, 202, 0.3);
 }
@@ -816,7 +808,7 @@ li:hover .ac-game-title::after {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    opacity: 0;
+    opacity: 50;
     transform: translateX(-10px);
     transition: all 0.3s ease;
 }
@@ -1034,6 +1026,7 @@ li:hover .ac-game-title::after {
     background-color: rgba(60, 60, 54, 0.2);
     border-left: 3px solid var(--color-wine);
     font-style: italic;
+    color: var(--color-beige);
 }
 
 /* Empty cart message */

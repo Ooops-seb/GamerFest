@@ -6,6 +6,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\InscripcionIndividualController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', function () {
@@ -28,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
 // EQUIPO
 Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
 Route::get('/equipos', [EquipoController::class, 'index']);
-// Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])->name('mis_equipos');
+Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])->name('mis_equipos');
 Route::get('/equipos/{id}', [EquipoController::class, 'show']);
 Route::get('/equipos/{id}/miembros', [EquipoController::class, 'getMiembros']);
 Route::post('/equipos', [EquipoController::class, 'store']);

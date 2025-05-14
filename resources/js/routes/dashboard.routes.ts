@@ -1,5 +1,5 @@
 import { NavItem } from '@/types';
-import { BookOpen, Folder, Gamepad2, LayoutGrid } from 'lucide-vue-next';
+import { BookOpen, Clock10Icon, Folder, Gamepad2, LayoutGrid } from 'lucide-vue-next';
 
 // Register new routes
 const mainNavItems: NavItem[] = [
@@ -11,6 +11,11 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Mis Inscripciones',
         href: '/get_mis_inscripciones',
+        icon: Gamepad2,
+    },
+    {
+        title: 'Mi equipo',
+        href: '/mis_equipos',
         icon: Gamepad2,
     },
 ];
@@ -25,6 +30,11 @@ const footerNavItems: NavItem[] = [
         title: 'Documentation',
         href: 'https://laravel.com/docs/starter-kits',
         icon: BookOpen,
+    },
+    {
+        title: 'Horarios',
+        href: '/pdf/horarios_gamerfest.png',
+        icon: Clock10Icon,
     },
 ];
 
