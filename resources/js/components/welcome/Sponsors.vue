@@ -21,7 +21,7 @@
                 <!-- Grid de sponsors con nuevo layout -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-1 justify-items-center">
                     <div v-for="sponsor in sponsors" :key="sponsor.id" class="group">
-                        <Link :href="sponsor.url_pagina" target="_blank" class="block transition-all duration-300 hover:scale-105">
+                        <Link :href="sponsor.url_pagina" class="block transition-all duration-300 hover:scale-105">
                             <div class="sponsor-card">
                                 <div class="sponsor-border"></div>
                                 <div class="sponsor-content">

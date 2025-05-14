@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { reactive, onMounted, ref, watchEffect } from 'vue';
 import Swal from 'sweetalert2';
 import InputError from '@/../../resources/js/components/InputError.vue';
@@ -410,8 +410,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Carrito de Compras" />
-
+    <title>Carrito de Compras</title>
     <div class="fixed top-0 left-0 w-full navbar-container animate__animated animate__fadeInDown">
         <Navbar :can-login="false" :can-register="false" :num-juegos-seleccionados="numJuegosSeleccionados" :juegos-inscritos="juegosInscritos">
         </Navbar>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-// import { Link } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import { ChevronDown } from 'lucide-vue-next';
 import { ref } from 'vue';
-// import { route } from 'ziggy-js';
+import { route } from 'ziggy-js';
 import iconLight from '@/../../public/images/Icon2025black.webp';
 import iconDark from '@/../../public/images/Icon2025white.webp';
 
@@ -173,12 +173,19 @@ const navigationItems: NavigationItems[] = [
 
                     <!-- Botones de autenticación -->
                     <div class="flex items-center space-x-4">
-                        <!-- <Link
+                        <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"
                             class="hidden md:inline-block dark:text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                         >
                             Dashboard
+                        </Link>
+                        <Link
+                            v-if="$page.props.auth.user"
+                            :href="route('inscripciones')"
+                            class="py-4 px-3 font-semibold text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500 glitch-mobile"
+                        >
+                            Mis Incripciones
                         </Link>
                         <template v-else>
                             <Link
@@ -193,8 +200,8 @@ const navigationItems: NavigationItems[] = [
                             >
                                 Register
                             </Link>
-                        </template> -->
-                        <!-- <Link
+                        </template>
+                        <Link
                             :href="route('carrito')"
                             class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white dark:text-white-400 glitch"
                             id="cart"
@@ -206,7 +213,7 @@ const navigationItems: NavigationItems[] = [
                                 />
                             </svg>
                             <span class="cart-item-number">{{ numJuegosSeleccionados }}</span>
-                        </Link> -->
+                        </Link>
 
                         <!-- Botón de menú móvil -->
                         <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden text-[#f5f5f0] hover:text-[#c41e3a] focus:outline-none">
@@ -264,7 +271,7 @@ const navigationItems: NavigationItems[] = [
                         </template>
 
                         <!-- Botones de autenticación móvil -->
-                        <!-- <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10 flex space-x-4">
+                        <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10 flex space-x-4">
                             <Link
                                 v-if="$page.props.auth.user"
                                 :href="route('dashboard')"
@@ -289,7 +296,7 @@ const navigationItems: NavigationItems[] = [
                                     Registrarse
                                 </Link>
                             </template>
-                        </div> -->
+                        </div>
 
                         <!-- Redes sociales móvil -->
                         <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10">

@@ -8,9 +8,9 @@ use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\InscripcionIndividualController;
 
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome');
-// })->name('home');
+Route::get('/', function () {
+    return Inertia::render('Welcome');
+})->name('home');
 
 
 //Platform Routes
@@ -38,10 +38,10 @@ Route::put('/equipos/{id}', [EquipoController::class, 'update']);
 
 
 Route::post('/get_inscripciones_by_game', [InscripcionIndividualController::class, 'get_inscripciones_by_game']);
-Route::post('/guardar_all_inscripciones', [\App\Http\Controllers\InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
+Route::post('/guardar_all_inscripciones', [InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
+Route::get('/get_mis_inscripciones', [InscripcionIndividualController::class, 'get_mis_inscripciones'])->name('inscripciones');
 
 
 
-
-// require __DIR__ . '/settings.php';
-// require __DIR__ . '/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

@@ -1,5 +1,5 @@
 import { NavItem } from '@/types';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { BookOpen, Folder, Gamepad2, LayoutGrid } from 'lucide-vue-next';
 
 // Register new routes
 const mainNavItems: NavItem[] = [
@@ -7,6 +7,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Mis Inscripciones',
+        href: '/get_mis_inscripciones',
+        icon: Gamepad2,
     },
 ];
 
