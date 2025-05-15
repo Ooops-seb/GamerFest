@@ -6,6 +6,7 @@ import Sponsors from '@/components/welcome/Sponsors.vue';
 import Footer from '@/components/welcome/navigation/Footer.vue';
 import Navbar from '@/components/welcome/navigation/Navbar.vue';
 import JuegosIndividuales from '@/components/welcome/games/IndividualGames.vue';
+import { ref } from 'vue';
 
 defineProps({
     juegosIndividual: {
@@ -21,6 +22,19 @@ defineProps({
         default: () => [],
     },
 });
+
+// Track selected games count
+const selectedGamesCount = ref(0);
+
+// Update the count when children emit changes
+const updateSelectedCount = (count: number) => {
+    selectedGamesCount.value = count;
+};
+
+// Get inscribed games from localStorage for the navbar
+const getJuegosInscritos = () => {
+    return JSON.parse(localStorage.getItem('juegosInscritos') || '[]');
+};
 </script>
 
 <template>
@@ -29,7 +43,7 @@ defineProps({
         id="nav"
         class="flex min-h-screen flex-col items-center justify-center bg-beige bg-[url('/public/images/texture.webp')] dark:bg-none pb-6 text-[#1b1b18] lg:pb-8 dark:bg-black"
     >
-        <Navbar :numJuegosSeleccionados="0" :juegosInscritos="[]"></Navbar>
+        <Navbar :numJuegosSeleccionados="selectedGamesCount" :juegosInscritos="getJuegosInscritos()"></Navbar>
         <div class="my-8 flex flex-col items-center justify-center opacity-100 transition-opacity duration-750 starting:opacity-0">
             <picture class="select-none pointer-events-none">
                 <source :srcset="logoLight" media="(prefers-color-scheme: dark)" />
@@ -37,7 +51,7 @@ defineProps({
             </picture>
             <span class="font-cinzel text-wine dark:text-beige text-2xl select-none">Próximamente en Junio</span>
         </div>
-        <JuegosIndividuales :juegos="juegosIndividual" :juegosGrupo="juegosGrupo" />
+        <JuegosIndividuales :juegos="juegosIndividual" :juegosGrupo="juegosGrupo" @update-selected-count="updateSelectedCount" />
         <Sponsors :sponsors="sponsors" />
         <Footer></Footer>
     </div>
