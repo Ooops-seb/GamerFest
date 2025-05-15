@@ -175,13 +175,6 @@ const navigationItems: NavigationItems[] = [
                     <div class="flex items-center space-x-4">
                         <Link
                             v-if="$page.props.auth.user"
-                            :href="route('inscripciones')"
-                            class="hidden md:inline-block dark:text-[#f5f5f0] hover:text-wine transition-colors px-4 py-2 text-sm font-cinzel rounded duration-200"
-                        >
-                            Mis Incripciones
-                        </Link>
-                        <Link
-                            v-if="$page.props.auth.user"
                             :href="route('dashboard')"
                             class="hidden md:inline-block dark:text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                         >
