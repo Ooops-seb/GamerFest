@@ -1,16 +1,17 @@
 import { NavItem } from '@/types';
-import { BookOpen, Clock10Icon, Folder, Gamepad2, LayoutGrid } from 'lucide-vue-next';
+import { Clock10Icon, Gamepad2, Globe, LayoutGrid } from 'lucide-vue-next';
 
 // Register new routes
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
+        requiredAdmin: true,
         icon: LayoutGrid,
     },
     {
         title: 'Mis Inscripciones',
-        href: '/get_mis_inscripciones',
+        href: '/mis_inscripciones',
         icon: Gamepad2,
     },
     {
@@ -22,14 +23,9 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
+        title: 'Web',
+        href: '/',
+        icon: Globe,
     },
     {
         title: 'Horarios',
