@@ -8,11 +8,7 @@ use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\InscripcionIndividualController;
 
 
-
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('home');
-
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
 //Platform Routes
 Route::middleware(['auth'])->group(function () {
