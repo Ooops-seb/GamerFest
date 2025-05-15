@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
+import HelperText from '@/components/HelperText.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { Link as InertiaLink } from '@inertiajs/vue3';
 
 interface Inscripcion {
     img_id: string;
@@ -18,17 +19,21 @@ defineProps({
     inscripciones: {
         type: Array as () => Inscripcion[],
         required: true,
-        default: () => [], // Valor predeterminado
+        default: () => [],
     },
 });
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Mis Inscripciones',
+        href: '/mis_inscripciones',
+    },
+];
 </script>
 
 <template>
     <Head title="Mis Inscripciones" />
-    <AppSidebarLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-beige leading-tight tracking-wide">Juegos Inscritos</h2>
-        </template>
+    <AppLayout :breadcrumbs="breadcrumbs">
         <div v-if="inscripciones.length > 0" class="custom-width mx-auto px-4 sm:px-8">
             <div class="py-12 animate__animated animate__fadeInUp">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
@@ -91,18 +96,8 @@ defineProps({
                 </div>
             </div>
         </div>
-        <div v-else class="custom-width mx-auto py-12 px-4 sm:px-8 text-center">
-            <div class="bg-gray p-8 rounded-lg border border-gray-light/20 shadow-lg transition-all duration-300">
-                <span class="text-beige block mb-4">No tienes items agregados al carrito aún</span>
-                <InertiaLink
-                    href="/"
-                    class="text-wine hover:text-beige transition-colors duration-300 inline-block border-b border-wine hover:border-beige"
-                >
-                    Volver al Inicio
-                </InertiaLink>
-            </div>
-        </div>
-    </AppSidebarLayout>
+        <HelperText v-else text="No tienes items agregados al carrito aún"></HelperText>
+    </AppLayout>
 </template>
 
 <style scoped>

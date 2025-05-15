@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import InputError from '@/components/InputError.vue';
 import Swal from 'sweetalert2';
 import InputLabel from '@/components/InputLabel.vue';
@@ -8,6 +7,9 @@ import { ref, onMounted } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import Modal from '@/components/Modal.vue';
 import axios from 'axios';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { BreadcrumbItem } from '@/types';
+import HelperText from '@/components/HelperText.vue';
 
 const props = defineProps({
     user_id: {
@@ -181,16 +183,19 @@ const openModal = (juegoId: number) => {
 onMounted(async () => {
     await recuperarEquipos(); // Llama a la función recuperarEquipos al montar el componente
 });
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Mis Equipos',
+        href: '/mis_equipos',
+    },
+];
 </script>
 
 <template>
     <Head title="Mis Equipos" />
 
-    <AppSidebarLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-white leading-tight tracking-wide">Equipos Registrados</h2>
-        </template>
-
+    <AppLayout :breadcrumbs="breadcrumbs">
         <div class="py-12 animate__animated animate__fadeInUp">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="overflow-hidden p-6">
@@ -299,21 +304,11 @@ onMounted(async () => {
                             </div>
                         </div>
                     </div>
-                    <div v-else class="custom-width mx-auto py-12 px-4 sm:px-8 text-center">
-                        <div class="bg-gray-light/10 border border-gray-light/20 rounded-lg p-8 shadow-md">
-                            <span class="text-beige block mb-4"> No tienes equipos creados aún, regístrate en juegos grupales </span>
-                            <a
-                                href="/"
-                                class="text-wine hover:text-beige transition-colors duration-300 inline-block border-b border-wine hover:border-beige"
-                            >
-                                Volver al Inicio
-                            </a>
-                        </div>
-                    </div>
+                    <HelperText v-else></HelperText>
                 </div>
             </div>
         </div>
-    </AppSidebarLayout>
+    </AppLayout>
 </template>
 
 <!-- Estilos -->
