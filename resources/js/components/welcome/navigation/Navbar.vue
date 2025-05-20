@@ -45,7 +45,7 @@ type NavigationItems = {
 const navigationItems: NavigationItems[] = [
     {
         name: 'INICIO',
-        href: '#',
+        href: '/',
     },
     // {
     //     name: 'EVENTOS',
@@ -67,9 +67,9 @@ const navigationItems: NavigationItems[] = [
     //         { name: 'Fortnite', href: '#' },
     //     ],
     // },
-    { name: 'SPONSORS', href: '#sponsors' },
+    { name: 'SPONSORS', href: '/#sponsors' },
     // { name: 'GALERÍA', href: '#' },
-    { name: 'CONTACTO', href: '#contact' },
+    { name: 'CONTACTO', href: '/#contact' },
 ];
 </script>
 
