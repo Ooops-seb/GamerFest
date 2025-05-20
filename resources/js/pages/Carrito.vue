@@ -4,7 +4,6 @@ import { reactive, onMounted, ref, watchEffect } from 'vue';
 import Swal from 'sweetalert2';
 import InputError from '@/../../resources/js/components/InputError.vue';
 import TextInput from '@/../../resources/js/components/TextInput.vue';
-import PrimaryButton from '@/../../resources/js/components/PrimaryButton.vue';
 import Navbar from '@/../../resources/js/components/welcome/navigation/Navbar.vue';
 import Modal from '@/../../resources/js/components/Modal.vue';
 import axios from 'axios';
@@ -12,6 +11,7 @@ import supabase from '@/lib/supabase';
 import InputLabel from '@/components/InputLabel.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Check, Plus, Trash } from 'lucide-vue-next';
+import Input from '@/components/ui/input/Input.vue';
 
 const billingData = {
     name: import.meta.env.VITE_BILLING_NAME ?? 'Gamer Fest',
@@ -482,27 +482,27 @@ onMounted(() => {
                                 <!-- Contenido a la derecha -->
                                 <div class="flex flex-row items-center space-x-4 sm:space-x-4 part-2">
                                     <div v-if="juego.modalidad == 'grupo'">
-                                        <button
+                                        <Button
                                             v-if="equipos.length && equipos.find((equipo) => equipo.id_juego === juego.id)"
                                             @click="openModal(juego.id)"
                                             class="ac-button ac-button-edit"
                                         >
                                             <span class="ac-button-text">Editar equipo</span>
-                                        </button>
-                                        <button v-else @click="openModal(juego.id)" class="ac-button ac-button-create">
+                                        </Button>
+                                        <Button v-else @click="openModal(juego.id)" class="ac-button ac-button-create">
                                             <span class="ac-button-text text-black dark:text-white">Crear equipo</span>
-                                        </button>
+                                        </Button>
                                     </div>
 
                                     <div class="inline-flex items-center text-sm font-bold text-ac-beige">
                                         <span class="ac-price dark:text-white">$ {{ juego.costo_inscripcion }}</span>
                                     </div>
                                     <div class="inline-flex items-center text-base font-semibold">
-                                        <button @click="removeJuego(index)" class="ac-delete-button group">
+                                        <Button @click="removeJuego(index)" class="ac-delete-button group">
                                             <div class="ac-delete-wrapper">
                                                 <Trash class="w-4 text-wine"></Trash>
                                             </div>
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
@@ -554,24 +554,24 @@ onMounted(() => {
 
                                 <div class="flex items-center justify-end mt-4">
                                     <template v-if="formEquipo.id_equipo !== '' && formEquipo.id_equipo !== null">
-                                        <PrimaryButton
+                                        <Button
                                             class="ml-4 ac-primary-button"
                                             :class="{ 'opacity-25': form.processing }"
                                             :disabled="form.processing"
                                             @click.prevent="updateTeam"
                                         >
                                             <span>Actualizar equipo</span>
-                                        </PrimaryButton>
+                                        </Button>
                                     </template>
                                     <template v-else>
-                                        <PrimaryButton
-                                            class="ml-4 ac-primary-button"
+                                        <Button
+                                            class="ml-4 ac-primary-button cursor-pointer"
                                             :class="{ 'opacity-25': form.processing }"
                                             :disabled="form.processing"
                                             @click.prevent="createTeam"
                                         >
                                             <span>Crear equipo</span>
-                                        </PrimaryButton>
+                                        </Button>
                                     </template>
                                 </div>
                             </div>
@@ -586,7 +586,7 @@ onMounted(() => {
                     </div>
 
                     <form class="flex flex-col py-4 gap-y-2" @submit.prevent="submitForm">
-                        <input
+                        <Input
                             v-if="state.total !== 0"
                             placeholder="Número de comprobante"
                             class="ac-cart-input"
@@ -599,7 +599,7 @@ onMounted(() => {
                             Archivo: <small>{{ form.comprobante_pago?.name ?? 'Selecciona la imagen del comprobante (png)' }}</small>
                         </span>
                         <div v-if="state.total !== 0" class="ac-file-container">
-                            <input
+                            <Input
                                 type="file"
                                 id="comprobante_pago"
                                 name="comprobante_pago"
@@ -621,15 +621,15 @@ onMounted(() => {
                                 </div>
                             </label>
                         </div>
-                        <PrimaryButton
-                            class="md:ml-1 ac-submit-button"
+                        <Button
+                            class="md:ml-1 ac-submit-button cursor-pointer"
                             :class="{ 'opacity-25': form.processing || form.loading }"
                             :disabled="form.processing || form.loading"
                             @click="submitForm"
                         >
                             <span v-if="!form.loading">{{ state.total === 0 ? 'Realizar Inscripción' : 'Procesar Pago' }}</span>
                             <span v-else>Cargando...</span>
-                        </PrimaryButton>
+                        </Button>
                         <div v-if="state.total !== 0" class="text-beige flex flex-col">
                             <span class="text-sm text-black dark:text-beige">Es necesario realizar el deposito a la cuenta: </span>
                             <span class="text-xs text-black dark:text-beige">{{ billingData.bank }} - Cuenta de {{ billingData.type }}</span>
@@ -651,27 +651,6 @@ onMounted(() => {
 </template>
 
 <style>
-:root {
-    --color-black: #070706;
-    --color-gray: #3c3c36;
-    --color-gray-light: #7c7c72;
-    --color-beige: #e2d9ca;
-    --color-wine: #72211d;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e2d9ca' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    z-index: -1;
-    opacity: 0.1;
-    pointer-events: none;
-}
-
 /* Assassin's Creed Container */
 .ac-container {
     border: 1px solid var(--color-gray);

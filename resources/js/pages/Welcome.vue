@@ -7,6 +7,7 @@ import Footer from '@/components/welcome/navigation/Footer.vue';
 import Navbar from '@/components/welcome/navigation/Navbar.vue';
 import JuegosIndividuales from '@/components/welcome/games/IndividualGames.vue';
 import { ref } from 'vue';
+import { onMounted } from 'vue';
 
 defineProps({
     juegosIndividual: {
@@ -35,6 +36,10 @@ const updateSelectedCount = (count: number) => {
 const getJuegosInscritos = () => {
     return JSON.parse(localStorage.getItem('juegosInscritos') || '[]');
 };
+
+onMounted(() => {
+    localStorage.clear();
+});
 </script>
 
 <template>
