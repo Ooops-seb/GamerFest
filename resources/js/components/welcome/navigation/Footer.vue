@@ -5,7 +5,7 @@ import logoDark from '@/../../public/images/Logo2025white.webp';
 </script>
 
 <template>
-    <footer id="contact" class="dark:bg-black border-t border-gray/10 dark:border-[#f5f5f0]/10 pt-12">
+    <footer id="contact" class="dark:bg-black border-t border-gray/10 dark:border-beige/10 pt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div class="md:col-span-1">
@@ -15,46 +15,41 @@ import logoDark from '@/../../public/images/Logo2025white.webp';
                             <img class="w-32 mx-auto" :src="logoDark" alt="Logo" />
                         </picture>
                     </div>
-                    <p class="dark:text-[#f5f5f0]/70 text-sm mb-4">El evento gaming más importante del año. Torneos, exhibiciones y mucho más.</p>
-                    <p class="dark:text-[#f5f5f0] text-sm font-cinzel">
-                        PRÓXIMAMENTE<br />
-                        <span class="text-wine">JUNIO</span>
-                    </p>
+                    <p class="dark:text-beige/70 text-sm mb-4">El evento gaming más importante del año. Torneos, exhibiciones y mucho más.</p>
+                    <p class="dark:text-beige text-sm font-cinzel">JUNIO 3, 4 y 5</p>
                 </div>
 
                 <div class="md:col-span-1">
-                    <h3 class="dark:text-[#f5f5f0] text-sm font-cinzel font-bold mb-4 tracking-wider">ENLACES</h3>
+                    <h3 class="dark:text-beige text-sm font-cinzel font-bold mb-4 tracking-wider">ENLACES</h3>
                     <ul class="space-y-2">
                         <li>
-                            <a href="#nav" class="dark:text-[#f5f5f0]/70 hover:text-wine text-sm transition-colors duration-200"> Inicio </a>
+                            <a href="#nav" class="dark:text-beige/70 hover:text-wine text-sm transition-colors duration-200"> Inicio </a>
                         </li>
                         <li>
-                            <a href="#sponsors" class="dark:text-[#f5f5f0]/70 hover:text-wine text-sm transition-colors duration-200"> Sponsors </a>
+                            <a href="#sponsors" class="dark:text-beige/70 hover:text-wine text-sm transition-colors duration-200"> Sponsors </a>
                         </li>
                         <li>
-                            <a href="#contact" class="dark:text-[#f5f5f0]/70 hover:text-wine text-sm transition-colors duration-200"> Contacto </a>
+                            <a href="#contact" class="dark:text-beige/70 hover:text-wine text-sm transition-colors duration-200"> Contacto </a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="md:col-span-1">
-                    <h3 class="dark:text-[#f5f5f0] text-sm font-cinzel font-bold mb-4 tracking-wider">LEGAL</h3>
+                    <h3 class="dark:text-beige text-sm font-cinzel font-bold mb-4 tracking-wider">LEGAL</h3>
                     <ul class="space-y-2">
                         <li>
-                            <a href="#" class="dark:text-[#f5f5f0]/70 hover:text-wine text-sm transition-colors duration-200">
-                                Términos y condiciones
-                            </a>
+                            <a href="#" class="dark:text-beige/70 hover:text-wine text-sm transition-colors duration-200"> Términos y condiciones </a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="md:col-span-1">
-                    <h3 class="dark:text-[#f5f5f0] text-sm font-cinzel font-bold mb-4 tracking-wider">SÍGUENOS</h3>
+                    <h3 class="dark:text-beige text-sm font-cinzel font-bold mb-4 tracking-wider">SÍGUENOS</h3>
                     <div class="flex space-x-4 mb-4">
                         <a
                             href="https://www.facebook.com/gamerfest.ec"
                             target="_blank"
-                            class="dark:text-[#f5f5f0] hover:text-wine transition-colors duration-200"
+                            class="dark:text-beige hover:text-wine transition-colors duration-200"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -65,7 +60,7 @@ import logoDark from '@/../../public/images/Logo2025white.webp';
                         <a
                             href="https://www.instagram.com/gamerfest.ec"
                             target="_blank"
-                            class="dark:text-[#f5f5f0] hover:text-wine transition-colors duration-200"
+                            class="dark:text-beige hover:text-wine transition-colors duration-200"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -74,20 +69,20 @@ import logoDark from '@/../../public/images/Logo2025white.webp';
                             </svg>
                         </a>
                     </div>
-                    <h3 class="dark:text-[#f5f5f0] text-sm font-cinzel font-bold mb-2 tracking-wider">CONTACTO</h3>
-                    <p class="dark:text-[#f5f5f0]/70 text-sm">info@gamerfestespel.com</p>
+                    <h3 class="dark:text-beige text-sm font-cinzel font-bold mb-2 tracking-wider">CONTACTO</h3>
+                    <p class="dark:text-beige/70 text-sm">info@gamerfestespel.com</p>
                 </div>
             </div>
 
-            <div class="border-t border-gray/10 dark:border-[#f5f5f0]/10 my-6"></div>
+            <div class="border-t border-gray/10 dark:border-beige/10 my-6"></div>
 
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <p class="dark:text-[#f5f5f0]/50 text-xs">&copy; 2025 GamerFest - ESPEL. Todos los derechos reservados.</p>
+                <p class="dark:text-beige/50 text-xs">&copy; 2025 GamerFest - ESPEL. Todos los derechos reservados.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
                     <a
                         href="https://espe-el.espe.edu.ec/"
                         target="_blank"
-                        class="dark:text-[#f5f5f0]/50 hover:text-wine text-xs transition-colors duration-200 flex items-center"
+                        class="dark:text-beige/50 hover:text-wine text-xs transition-colors duration-200 flex items-center"
                     >
                         Universidad de las Fuerzas Armadas - ESPE Sede Latacunga
                         <ExternalLink class="ml-1 w-3"></ExternalLink>

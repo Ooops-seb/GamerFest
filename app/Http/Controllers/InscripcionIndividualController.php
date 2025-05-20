@@ -41,7 +41,7 @@ class InscripcionIndividualController extends Controller
                 'message' => 'Inscripcion creada exitosamente'
             ], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => "Error al crear la inscripcion: " . $e->getMessage()], 500);
+            return response()->json(['message' => "Error al crear la inscripción individual: " . $e->getMessage()], 500);
         }
     }
 
@@ -96,30 +96,19 @@ class InscripcionIndividualController extends Controller
             $data = $request->validate([
                 'user_id' => 'required|integer',
                 'juegos' => 'present',
-                'comprobante_pago' => 'mimes:jpeg,png|max:2048',
+                'comprobante_pago' => 'string',
                 'nro_comprobante' => 'string',
                 'valor_comprobante' => 'required|numeric',
             ]);
 
-            // Define $path as null
-            $path = null;
-
-            // Check if 'comprobante_pago' is present in the request
-            if ($request->hasFile('comprobante_pago')) {
-                // Hacer el guardado de la imagen aquí, por ejemplo:
-                $comprobante = $request->file('comprobante_pago');
-                $extension = $comprobante->getClientOriginalExtension();
-                $nombreArchivo = 'comprobante_' . uniqid() . '.' . $extension;
-                $path = $comprobante->storeAs('public/comprobantes', $nombreArchivo);
-                $path = str_replace('public/', '', $path); // remove 'public/' from the path
-            }
+            // Ya no se maneja archivo, solo se toma el string directamente
+            $path = $data['comprobante_pago'] ?? null;
 
             $arrayJuegos = json_decode($data['juegos']);
 
             if (!is_array($arrayJuegos)) {
                 return response()->json(['message' => 'Error al decodificar los juegos'], 400);
             }
-            
 
             foreach ($arrayJuegos as $juego) {
                 $juegoData = [
@@ -128,7 +117,6 @@ class InscripcionIndividualController extends Controller
                     'nro_comprobante' => $data['nro_comprobante'],
                     'valor_comprobante' => $data['valor_comprobante'],
                 ];
-
 
                 if ($juego->modalidad == 'grupo') {
                     // Verificar si el usuario tiene un equipo
@@ -155,8 +143,7 @@ class InscripcionIndividualController extends Controller
                 if (!$inscripcion->exists) {
                     $inscripcion->comprobante_pago = $path;
                     $inscripcion->estado = 'inscrito'; // ✅ aquí está el valor faltante
-                }        
-                
+                }
 
                 // Asignar el número de comprobante a todas las instancias
                 $inscripcion->nro_comprobante = $data['nro_comprobante'];
@@ -179,9 +166,17 @@ class InscripcionIndividualController extends Controller
                 'file' => $e->getFile(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return response()->json(['message' => "Error al crear la inscripción"], 500);
+            return response()->json([
+                'message' => "Error al crear la inscripción (all)",
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile(),
+                    'trace' => $e->getTraceAsString()
+                ]
+            ], 500);
         }
-        
+
     }
 
     public function get_inscripciones_by_game(Request $request)
@@ -197,9 +192,11 @@ class InscripcionIndividualController extends Controller
 
                 // Obtiene las inscripciones individuales y grupales basadas en el juego
                 $inscripcionesIndividuales = $juego->inscripcionesIndividuales()
-                    ->with(['user' => function ($query) {
-                        $query->select('id', 'name', 'phone');
-                    }])
+                    ->with([
+                        'user' => function ($query) {
+                            $query->select('id', 'name', 'phone');
+                        }
+                    ])
                     ->select('id', 'user_id', 'estado_pago', 'id_juego', 'nro_comprobante', 'comprobante_pago', 'valor_comprobante') // incluye nro_comprobante y valor_comprobante
                     ->paginate(100)
                     ->map(function ($inscripcion) use ($juego) {
@@ -211,9 +208,11 @@ class InscripcionIndividualController extends Controller
                     ->with([
                         'equipo' => function ($query) {
                             $query->select('id', 'nombre_equipo', 'miembros', 'user_id')
-                                ->with(['user' => function ($query) {
-                                    $query->select('id', 'name', 'phone');
-                                }]);
+                                ->with([
+                                    'user' => function ($query) {
+                                        $query->select('id', 'name', 'phone');
+                                    }
+                                ]);
                         }
                     ])
                     ->select('id', 'id_equipo', 'estado_pago', 'id_juego', 'nro_comprobante', 'comprobante_pago', 'valor_comprobante') // incluye nro_comprobante y valor_comprobante

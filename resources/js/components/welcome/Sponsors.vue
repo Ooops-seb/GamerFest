@@ -14,7 +14,7 @@
             <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
                 <div
                     v-for="sponsor in sponsors"
-                    :key="sponsor.id || sponsor.name"
+                    :key="sponsor.id || sponsor.nombre"
                     class="flex flex-col items-center transition-transform duration-300 hover:-translate-y-1"
                 >
                     <div
@@ -28,22 +28,22 @@
                                 class="w-full h-full flex items-center justify-center"
                             >
                                 <img
-                                    :src="sponsor.url_imagen"
-                                    :alt="sponsor.name"
-                                    class="max-w-full max-h-full brightness-0 invert opacity-80 transition-opacity duration-300 hover:opacity-100"
+                                    :src="`/images/sponsors/${sponsor.url_imagen}`"
+                                    :alt="sponsor.nombre"
+                                    class="max-w-full max-h-full transition-opacity duration-300 hover:opacity-100"
                                 />
                             </a>
                         </template>
                         <template v-else>
                             <img
-                                :src="sponsor.url_imagen"
-                                :alt="sponsor.name"
-                                class="max-w-full max-h-full brightness-0 invert opacity-80 transition-opacity duration-300 hover:opacity-100"
+                                :src="`/images/sponsors/${sponsor.url_imagen}`"
+                                :alt="sponsor.nombre"
+                                class="max-w-full max-h-full transition-opacity duration-300 hover:opacity-100"
                             />
                         </template>
                     </div>
                     <p class="text-beige text-sm font-cinzel font-semibold tracking-wide">
-                        {{ sponsor.name }}
+                        {{ sponsor.nombre }}
                     </p>
                 </div>
             </div>
@@ -52,43 +52,17 @@
 </template>
 
 <script setup lang="ts">
-import { ISponsors } from '@/types/api/Sponsors';
-import { ref } from 'vue';
+interface Sponsor {
+    id: number;
+    url_pagina: string;
+    url_imagen: string;
+    nombre: string;
+}
 
-const sponsors = ref<ISponsors[]>([
-    // {
-    //     id: '1',
-    //     name: 'EPIC GAMES',
-    //     url_pagina: 'https://www.epicgames.com',
-    //     url_imagen: 'https://www.electricianlicense.com/wp-content/uploads/2020/06/placeholder-img.jpg',
-    // },
-    // {
-    //     id: '2',
-    //     name: 'NVIDIA',
-    //     url_pagina: 'https://www.nvidia.com',
-    //     url_imagen: 'https://www.electricianlicense.com/wp-content/uploads/2020/06/placeholder-img.jpg',
-    // },
-    // {
-    //     id: '3',
-    //     name: 'RAZER',
-    //     url_imagen: 'https://www.electricianlicense.com/wp-content/uploads/2020/06/placeholder-img.jpg',
-    // },
-    // {
-    //     id: '4',
-    //     name: 'ASUS ROG',
-    //     url_pagina: 'https://rog.asus.com',
-    //     url_imagen: 'https://www.electricianlicense.com/wp-content/uploads/2020/06/placeholder-img.jpg',
-    // },
-    // {
-    //     id: '5',
-    //     name: 'HYPERX',
-    //     url_imagen: 'https://www.electricianlicense.com/wp-content/uploads/2020/06/placeholder-img.jpg',
-    // },
-    // {
-    //     id: '6',
-    //     name: 'STEELSERIES',
-    //     url_pagina: 'https://steelseries.com',
-    //     url_imagen: 'https://www.electricianlicense.com/wp-content/uploads/2020/06/placeholder-img.jpg',
-    // },
-]);
+defineProps({
+    sponsors: {
+        type: Array as () => Sponsor[],
+        default: () => [],
+    },
+});
 </script>

@@ -14,6 +14,7 @@ export interface BreadcrumbItem {
 export interface NavItem {
     title: string;
     href: string;
+    requiredAdmin?: boolean;
     icon?: LucideIcon;
     isActive?: boolean;
 }
@@ -22,6 +23,7 @@ export interface SharedData extends PageProps {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    roles: string[];
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
 }

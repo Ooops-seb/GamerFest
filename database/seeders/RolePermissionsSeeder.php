@@ -74,17 +74,11 @@ class RolePermissionsSeeder extends Seeder
         $adminUser = User::firstOrCreate([
             'name' => 'Admin',
             'email' => 'admin@ooops.dev',
-            'password' => Hash::make('admin'),
+            'password' => Hash::make(env('APP_ADMIN_INITIAL_PASSWORD')),
             'email_verified_at' => now(),
         ]);
         $adminUser->assignRole($adminRole);
 
-        $playerUser = User::firstOrCreate([
-            'name' => 'Jugador',
-            'email' => 'test@ooops.dev',
-            'password' => Hash::make('jugador'),
-            'email_verified_at' => now(),
-        ]);
-        $playerUser->assignRole($jugadorRole);
+
     }
 }

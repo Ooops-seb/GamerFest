@@ -4,10 +4,22 @@ import { reactive, onMounted, ref, watchEffect } from 'vue';
 import Swal from 'sweetalert2';
 import InputError from '@/../../resources/js/components/InputError.vue';
 import TextInput from '@/../../resources/js/components/TextInput.vue';
-import PrimaryButton from '@/../../resources/js/components/PrimaryButton.vue';
 import Navbar from '@/../../resources/js/components/welcome/navigation/Navbar.vue';
 import Modal from '@/../../resources/js/components/Modal.vue';
 import axios from 'axios';
+import supabase from '@/lib/supabase';
+import InputLabel from '@/components/InputLabel.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { Check, Plus, Trash } from 'lucide-vue-next';
+import Input from '@/components/ui/input/Input.vue';
+
+const billingData = {
+    name: import.meta.env.VITE_BILLING_NAME ?? 'Gamer Fest',
+    account: import.meta.env.VITE_BILLING_ACCOUNT ?? '123456789',
+    bank: import.meta.env.VITE_BILLING_BANK ?? 'Banco Gamer',
+    ci: import.meta.env.VITE_BILLING_CI ?? '032456987',
+    type: import.meta.env.VITE_BILLING_TYPE ?? 'Ahorros',
+};
 
 interface AuthUser {
     id: number;
@@ -231,7 +243,7 @@ const getTotal = async () => {
 const updateFileName = () => {
     if (form.comprobante_pago) {
         const filename = form.comprobante_pago.name;
-        uploadedFileName.value = filename.length > 12 ? filename.slice(0, 12) + '...' : filename;
+        uploadedFileName.value = filename.length > 12 ? filename.slice(0, 12) : filename;
         isFileUploaded.value = true;
     } else {
         uploadedFileName.value = null;
@@ -261,6 +273,9 @@ const removeJuego = (index: number) => {
         if (result.isConfirmed) {
             state.juegos.splice(index, 1);
             localStorage.setItem('juegosInscritos', JSON.stringify(state.juegos));
+            // Actualizar juegosInscritos y numJuegosSeleccionados manualmente
+            juegosInscritos.value = [...state.juegos];
+            numJuegosSeleccionados.value = state.juegos.length;
             Swal.fire({
                 title: 'Eliminado',
                 text: 'El juego ha sido eliminado.',
@@ -290,9 +305,8 @@ const submitForm = async () => {
     if (valor_comprobante === '0.00') {
         nro_comprobante = 'no aplica';
     } else {
-        const nroInput = document.getElementById('nro_comprobante') as HTMLInputElement | null;
+        nro_comprobante = form.nro_comprobante;
         const fileInput = document.getElementById('comprobante_pago') as HTMLInputElement | null;
-        nro_comprobante = nroInput?.value || '';
         comprobante_pago = fileInput?.files?.[0] || null;
 
         if (!nro_comprobante) {
@@ -342,9 +356,32 @@ const submitForm = async () => {
     formData.append('estado', form.estado);
     formData.append('nro_comprobante', nro_comprobante ?? '');
     formData.append('valor_comprobante', valor_comprobante);
+    const imgName = `${form.user_id}/${nro_comprobante}_comprobante.png`;
 
     if (comprobante_pago) {
-        formData.append('comprobante_pago', comprobante_pago);
+        const { data, error } = await supabase.storage.from('inscripciones').upload(imgName, comprobante_pago, {
+            cacheControl: '3600',
+            upsert: false,
+        });
+        if (error) {
+            return Swal.fire({
+                title: 'Error',
+                text: 'Error al subir el comprobante de pago',
+                icon: 'error',
+                background: '#1a1a1a',
+                color: '#f5f5f5',
+                iconColor: '#c41e3a',
+                customClass: {
+                    popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                    title: 'text-xl font-bold font-cinzel',
+                    htmlContainer: 'text-sm font-light',
+                    confirmButton: 'text-sm px-6 py-2',
+                },
+            });
+        }
+
+        const { data: publicData } = await supabase.storage.from('inscripciones').getPublicUrl(data.path);
+        formData.append('comprobante_pago', publicData?.publicUrl || '');
     }
 
     if (juegos.length > 3) {
@@ -359,7 +396,7 @@ const submitForm = async () => {
 
         if (!confirm.isConfirmed) return;
     }
-
+    // Removed unused variable isDarkMode
     try {
         await axios.post('/guardar_all_inscripciones', formData);
         Swal.fire({
@@ -383,6 +420,7 @@ const submitForm = async () => {
         });
     } catch (error) {
         let msg = 'Error inesperado al crear la inscripción';
+        await supabase.storage.from('inscripciones').remove([imgName]);
         if (axios.isAxiosError(error) && error.response) msg = error.response.data.message;
         Swal.fire({
             title: 'Error',
@@ -410,8 +448,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Carrito de Compras" />
-
+    <Head title="Carrito" />
     <div class="fixed top-0 left-0 w-full navbar-container animate__animated animate__fadeInDown">
         <Navbar :can-login="false" :can-register="false" :num-juegos-seleccionados="numJuegosSeleccionados" :juegos-inscritos="juegosInscritos">
         </Navbar>
@@ -448,30 +485,27 @@ onMounted(() => {
                                 <!-- Contenido a la derecha -->
                                 <div class="flex flex-row items-center space-x-4 sm:space-x-4 part-2">
                                     <div v-if="juego.modalidad == 'grupo'">
-                                        <button
+                                        <Button
                                             v-if="equipos.length && equipos.find((equipo) => equipo.id_juego === juego.id)"
                                             @click="openModal(juego.id)"
                                             class="ac-button ac-button-edit"
                                         >
                                             <span class="ac-button-text">Editar equipo</span>
-                                        </button>
-                                        <button v-else @click="openModal(juego.id)" class="ac-button ac-button-create">
-                                            <span class="ac-button-text">Crear equipo</span>
-                                        </button>
+                                        </Button>
+                                        <Button v-else @click="openModal(juego.id)" class="ac-button ac-button-create">
+                                            <span class="ac-button-text text-black dark:text-white">Crear equipo</span>
+                                        </Button>
                                     </div>
 
-                                    <div class="inline-flex items-center text-base font-semibold text-ac-beige">
-                                        <span class="ac-price">$ {{ juego.costo_inscripcion }}</span>
+                                    <div class="inline-flex items-center text-sm font-bold text-ac-beige">
+                                        <span class="ac-price dark:text-white">$ {{ juego.costo_inscripcion }}</span>
                                     </div>
                                     <div class="inline-flex items-center text-base font-semibold">
-                                        <button @click="removeJuego(index)" class="ac-delete-button group">
+                                        <Button @click="removeJuego(index)" class="ac-delete-button group">
                                             <div class="ac-delete-wrapper">
-                                                <i
-                                                    class="fa-solid fa-trash ac-delete-icon group-hover:text-ac-wine transition-colors duration-300"
-                                                ></i>
-                                                <span class="ac-delete-message">Eliminar</span>
+                                                <Trash class="w-4 text-wine"></Trash>
                                             </div>
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
@@ -481,9 +515,9 @@ onMounted(() => {
                     <Modal :show="showModal" @close="closeModal">
                         <div class="p-6 ac-modal">
                             <h3 class="ac-modal-title">Nuevo equipo</h3>
-                            <form @submit.prevent="createTeam">
+                            <div>
                                 <div>
-                                    <InputLabel for="nombre_equipo" value="Nombre del equipo" class="text-ac-beige" />
+                                    <InputLabel for="nombre_equipo" value="Nombre del equipo" />
                                     <TextInput
                                         id="nombre_equipo"
                                         type="text"
@@ -501,18 +535,18 @@ onMounted(() => {
                                         >(Ingresa el nombre real de cada integrante uno a la vez, da click a añadir miembro. Ej. John Doe)</span
                                     >
                                     <InputError class="mt-2" :message="formEquipo.errors.miembro" />
-                                    <button
+                                    <Button
                                         type="submit"
                                         :disabled="!formEquipo.miembro"
-                                        class="flex justify-center items-center space-x-1 mt-2 bg-transparent hover:text-ac-beige text-ac-gray-light disabled:text-ac-gray disabled:cursor-not-allowed px-2 py-1 rounded transition-colors duration-300"
+                                        class="flex justify-center items-center space-x-1 mt-2 disabled:text-gray disabled:cursor-not-allowed px-2 py-1 rounded transition-colors duration-300 cursor-pointer"
                                     >
+                                        <Plus></Plus>
                                         <span>Añadir miembro</span>
-                                        <i class="fa-solid fa-plus fa-xs flex items-center"></i>
-                                    </button>
+                                    </Button>
                                 </form>
 
                                 <div v-if="miembros.length" class="mt-4">
-                                    <InputLabel value="Miembros del equipo" class="text-ac-beige" />
+                                    <InputLabel value="Miembros del equipo" />
                                     <ul class="ac-member-list">
                                         <li class="ac-member-item" v-for="(miembro, index) in miembros" :key="index">
                                             {{ miembro }}
@@ -523,48 +557,52 @@ onMounted(() => {
 
                                 <div class="flex items-center justify-end mt-4">
                                     <template v-if="formEquipo.id_equipo !== '' && formEquipo.id_equipo !== null">
-                                        <PrimaryButton
+                                        <Button
                                             class="ml-4 ac-primary-button"
                                             :class="{ 'opacity-25': form.processing }"
                                             :disabled="form.processing"
                                             @click.prevent="updateTeam"
                                         >
                                             <span>Actualizar equipo</span>
-                                        </PrimaryButton>
+                                        </Button>
                                     </template>
                                     <template v-else>
-                                        <PrimaryButton
-                                            class="ml-4 ac-primary-button"
+                                        <Button
+                                            class="ml-4 ac-primary-button cursor-pointer"
                                             :class="{ 'opacity-25': form.processing }"
                                             :disabled="form.processing"
                                             @click.prevent="createTeam"
                                         >
                                             <span>Crear equipo</span>
-                                        </PrimaryButton>
+                                        </Button>
                                     </template>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </Modal>
 
                     <div class="ac-total-container">
-                        <strong class="text-ac-beige">Total: </strong>
+                        <strong class="text-ac-beige text-black dark:text-white">Total: </strong>
                         <span class="text-ac-beige text-base"
-                            >$<span class="ac-total-amount">{{ state.total.toFixed(2) }}</span></span
+                            >$<span class="ac-total-amount text-black dark:text-white">{{ state.total.toFixed(2) }}</span></span
                         >
                     </div>
 
-                    <form class="ac-form-container" @submit.prevent="submitForm">
-                        <input
+                    <form class="flex flex-col py-4 gap-y-2" @submit.prevent="submitForm">
+                        <Input
                             v-if="state.total !== 0"
                             placeholder="Número de comprobante"
                             class="ac-cart-input"
                             type="text"
                             name="nro_comprobante"
                             id="nro_comprobante"
+                            v-model="form.nro_comprobante"
                         />
+                        <span class="text-black dark:text-beige">
+                            Archivo: <small>{{ form.comprobante_pago?.name ?? 'Selecciona la imagen del comprobante (png)' }}</small>
+                        </span>
                         <div v-if="state.total !== 0" class="ac-file-container">
-                            <input
+                            <Input
                                 type="file"
                                 id="comprobante_pago"
                                 name="comprobante_pago"
@@ -572,34 +610,35 @@ onMounted(() => {
                                     form.comprobante_pago = ($event.target as HTMLInputElement)?.files?.[0] ?? null;
                                     updateFileName();
                                 "
-                                accept="image/jpg, image/jpeg, image/png, image/gif"
+                                accept="image/png"
                                 style="display: none"
                             />
                             <label for="comprobante_pago" class="ac-file-label" id="file-label-id">
                                 <div v-if="isFileUploaded" class="flex items-center">
-                                    <i class="fa fa-check" style="padding-right: 5px"></i>
                                     <span class="text-sm">{{ uploadedFileName }}</span>
+                                    <Check></Check>
                                 </div>
                                 <div v-else class="flex items-center">
                                     <i class="fa-regular fa-folder" style="padding-right: 5px"></i>
-                                    <span class="text-xs">SUBIR ARCHIVO</span>
+                                    <span class="text-xs text-black dark:text-white">SUBIR ARCHIVO</span>
                                 </div>
                             </label>
                         </div>
-                        <PrimaryButton
-                            class="md:ml-1 ac-submit-button"
+                        <Button
+                            class="md:ml-1 ac-submit-button cursor-pointer"
                             :class="{ 'opacity-25': form.processing || form.loading }"
                             :disabled="form.processing || form.loading"
                             @click="submitForm"
                         >
                             <span v-if="!form.loading">{{ state.total === 0 ? 'Realizar Inscripción' : 'Procesar Pago' }}</span>
                             <span v-else>Cargando...</span>
-                        </PrimaryButton>
-                        <div v-if="state.total !== 0" class="text-ac-beige text-bold ac-account-info">
-                            <span class="text-sm"
-                                >Es necesario realizar el deposito a la cuenta: xxxxxxxxxx Titular: Pablito Pablito Pablito Pablito - Banco Pichincha
-                                - CI: xxxxxxxxxx</span
-                            >
+                        </Button>
+                        <div v-if="state.total !== 0" class="text-beige flex flex-col items-center">
+                            <span class="text-sm text-black dark:text-beige">Es necesario realizar el deposito a la cuenta: </span>
+                            <span class="text-xs text-black dark:text-beige">{{ billingData.bank }} - Cuenta de {{ billingData.type }}</span>
+                            <span class="text-xs text-black dark:text-beige">{{ billingData.account }} </span>
+                            <span class="text-xs text-black dark:text-beige">Titular: {{ billingData.name }}</span>
+                            <span class="text-xs text-black dark:text-beige">CI: {{ billingData.ci }}</span>
                         </div>
                     </form>
                 </div>
@@ -615,36 +654,8 @@ onMounted(() => {
 </template>
 
 <style>
-:root {
-    --color-black: #070706;
-    --color-gray: #3c3c36;
-    --color-gray-light: #7c7c72;
-    --color-beige: #e2d9ca;
-    --color-wine: #72211d;
-}
-
-body {
-    background-color: var(--color-black);
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233c3c36' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-    background-attachment: fixed;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e2d9ca' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    z-index: -1;
-    opacity: 0.1;
-    pointer-events: none;
-}
-
 /* Assassin's Creed Container */
 .ac-container {
-    background-color: rgba(7, 7, 6, 0.9);
     border: 1px solid var(--color-gray);
     border-radius: 0;
     box-shadow: 0 0 20px rgba(226, 217, 202, 0.1);
@@ -675,7 +686,7 @@ body::before {
 }
 
 .ac-title {
-    color: var(--color-beige);
+    color: var(--color-wine);
     font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -745,7 +756,7 @@ li:hover .ac-game-title::after {
     background-color: transparent;
     color: var(--color-beige);
     border: 1px solid var(--color-gray);
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 0.2rem;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -789,7 +800,6 @@ li:hover .ac-game-title::after {
 
 .ac-price {
     font-family: 'Courier New', monospace;
-    color: var(--color-beige);
     font-weight: 700;
     text-shadow: 0 0 5px rgba(226, 217, 202, 0.3);
 }
@@ -817,7 +827,7 @@ li:hover .ac-game-title::after {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    opacity: 0;
+    opacity: 50;
     transform: translateX(-10px);
     transition: all 0.3s ease;
 }
@@ -931,7 +941,6 @@ li:hover .ac-game-title::after {
     gap: 1rem;
     margin: 0.5rem 0;
     padding: 0.6rem;
-    background-color: rgba(60, 60, 54, 0.2);
     border-left: 3px solid var(--color-wine);
 }
 
@@ -1035,6 +1044,7 @@ li:hover .ac-game-title::after {
     background-color: rgba(60, 60, 54, 0.2);
     border-left: 3px solid var(--color-wine);
     font-style: italic;
+    color: var(--color-beige);
 }
 
 /* Empty cart message */

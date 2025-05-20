@@ -88,11 +88,11 @@
 }
 
 :root {
-    --background: hsl(0 0% 100%);
+    --background: var(--color-beige);
     --foreground: var(--color-black);
-    --card: hsl(0 0% 100%);
+    --card: color-mix(in srgb, var(--color-beige) 80%, white 20%);
     --card-foreground: var(--color-black);
-    --popover: hsl(0 0% 100%);
+    --popover: color-mix(in srgb, var(--color-beige) 80%, white 20%);
     --popover-foreground: var(--color-black);
     --primary: hsl(0 0% 9%);
     --primary-foreground: hsl(0 0% 98%);
@@ -100,8 +100,8 @@
     --secondary-foreground: hsl(0 0% 9%);
     --muted: hsl(0 0% 96.1%);
     --muted-foreground: hsl(0 0% 45.1%);
-    --accent: hsl(0 0% 96.1%);
-    --accent-foreground: hsl(0 0% 9%);
+    --accent: color-mix(in srgb, var(--color-beige) 70%, white 30%);
+    --accent-foreground: var(--color-black);
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
     --border: var(--color-wine);
@@ -113,15 +113,15 @@
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
     --radius: 0.5rem;
-    --sidebar-background: hsl(0 0% 98%);
+    --sidebar-background: color-mix(in srgb, var(--color-beige) 85%, white 15%);
     --sidebar-foreground: hsl(240 5.3% 26.1%);
     --sidebar-primary: hsl(0 0% 10%);
-    --sidebar-primary-foreground: hsl(0 0% 98%);
-    --sidebar-accent: hsl(0 0% 94%);
+    --sidebar-primary-foreground: color-mix(in srgb, var(--color-beige) 85%, white 0%);
+    --sidebar-accent: color-mix(in srgb, var(--color-beige) 85%, white 0%);
     --sidebar-accent-foreground: hsl(0 0% 30%);
     --sidebar-border: var(--color-wine);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --sidebar: hsl(0 0% 98%);
+    --sidebar: color-mix(in srgb, var(--color-beige) 85%, white 15%);
 }
 
 .dark {
@@ -152,7 +152,7 @@
     --sidebar-background: hsl(0 0% 7%);
     --sidebar-foreground: hsl(0 0% 95.9%);
     --sidebar-primary: hsl(360, 100%, 100%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-primary-foreground: var(--color-beige);
     --sidebar-accent: hsl(0 0% 15.9%);
     --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
     --sidebar-border: var(--color-wine);
