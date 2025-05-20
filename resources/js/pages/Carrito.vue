@@ -273,6 +273,9 @@ const removeJuego = (index: number) => {
         if (result.isConfirmed) {
             state.juegos.splice(index, 1);
             localStorage.setItem('juegosInscritos', JSON.stringify(state.juegos));
+            // Actualizar juegosInscritos y numJuegosSeleccionados manualmente
+            juegosInscritos.value = [...state.juegos];
+            numJuegosSeleccionados.value = state.juegos.length;
             Swal.fire({
                 title: 'Eliminado',
                 text: 'El juego ha sido eliminado.',

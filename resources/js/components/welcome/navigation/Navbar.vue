@@ -194,11 +194,7 @@ const navigationItems: NavigationItems[] = [
                                 Register
                             </Link>
                         </template>
-                        <Link
-                            :href="route('carrito')"
-                            class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white dark:text-white-400 glitch"
-                            id="cart"
-                        >
+                        <Link :href="route('carrito')" class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-wine dark:text-white glitch" id="cart">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 256 256" class="w-6 h-6">
                                 <path
                                     fill="currentColor"
