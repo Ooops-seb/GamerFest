@@ -76,17 +76,17 @@ const navigationItems: NavigationItems[] = [
 <template>
     <div class="dark:bg-black w-full">
         <!-- Barra superior con información del evento -->
-        <div class="hidden lg:block dark:text-[#f5f5f0] text-black dark:bg-black border-b border-gray/10 dark:border-[#f5f5f0]/10">
+        <div class="dark:text-beige text-black dark:bg-black border-b border-gray/10 dark:border-beige/10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-10 text-xs">
                     <div class="flex items-center space-x-4">
-                        <span class="font-cinzel"> <span class="text-[#c41e3a]">PRÓXIMAMENTE:</span> JUNIO</span>
+                        <span class="font-cinzel">JUNIO 3, 4 y 5</span>
                     </div>
                     <div class="flex items-center space-x-4">
                         <a
                             href="https://www.facebook.com/gamerfest.ec"
                             target="_blank"
-                            class="hover:text-[#c41e3a] transition-colors duration-200 flex items-center"
+                            class="hover:text-wine transition-colors duration-200 flex items-center"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -98,7 +98,7 @@ const navigationItems: NavigationItems[] = [
                         <a
                             href="https://www.instagram.com/gamerfest.ec"
                             target="_blank"
-                            class="hover:text-[#c41e3a] transition-colors duration-200 flex items-center"
+                            class="hover:text-wine transition-colors duration-200 flex items-center"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -113,7 +113,7 @@ const navigationItems: NavigationItems[] = [
         </div>
 
         <!-- Navbar principal -->
-        <header class="dark:bg-black border-b border-gray/10 dark:border-[#f5f5f0]/10">
+        <header class="dark:bg-black border-b border-gray/10 dark:border-beige/10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-20">
                     <!-- Logo -->
@@ -125,7 +125,7 @@ const navigationItems: NavigationItems[] = [
                             </picture>
                             <div class="flex flex-col">
                                 <span class="text-wine text-2xl font-bold font-cinzel tracking-wider">GAMERFEST</span>
-                                <span class="dark:text-[#f5f5f0] text-black text-sm font-cinzel tracking-wider">2025</span>
+                                <span class="dark:text-beige text-black text-sm font-cinzel tracking-wider">2025</span>
                             </div>
                         </a>
                     </div>
@@ -136,13 +136,13 @@ const navigationItems: NavigationItems[] = [
                             <a
                                 v-if="!item.subItems"
                                 :href="item.href"
-                                class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a]"
+                                class="dark:text-beige hover:text-wine px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-wine"
                             >
                                 {{ item.name }}
                             </a>
                             <div v-else class="relative group">
                                 <button
-                                    class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a] flex items-center"
+                                    class="dark:text-beige hover:text-wine px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-wine flex items-center"
                                 >
                                     {{ item.name }}
                                     <svg
@@ -156,12 +156,12 @@ const navigationItems: NavigationItems[] = [
                                     </svg>
                                 </button>
                                 <div
-                                    class="absolute left-0 mt-2 w-48 bg-[#0a0a0a] border border-[#f5f5f0]/10 rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50"
+                                    class="absolute left-0 mt-2 w-48 bg-[#0a0a0a] border border-beige/10 rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50"
                                 >
                                     <template v-for="subItem in item.subItems" :key="subItem.name">
                                         <a
                                             :href="subItem.href"
-                                            class="block px-4 py-2 text-sm font-cinzel text-[#f5f5f0] hover:bg-[#c41e3a]/10 hover:text-[#c41e3a]"
+                                            class="block px-4 py-2 text-sm font-cinzel text-beige hover:bg-wine/10 hover:text-wine"
                                         >
                                             {{ subItem.name }}
                                         </a>
@@ -176,29 +176,25 @@ const navigationItems: NavigationItems[] = [
                         <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"
-                            class="hidden md:inline-block dark:text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
+                            class="hidden md:inline-block dark:text-beige border border-beige hover:bg-wine hover:border-wine hover:text-beige px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                         >
                             Dashboard
                         </Link>
                         <template v-else>
                             <Link
                                 :href="route('login')"
-                                class="hidden md:inline-block dark:text-[#f5f5f0] hover:text-[#c41e3a] text-sm font-cinzel transition-colors duration-200"
+                                class="hidden md:inline-block dark:text-beige hover:text-wine text-sm font-cinzel transition-colors duration-200"
                             >
                                 Iniciar sesión
                             </Link>
                             <Link
                                 :href="route('register')"
-                                class="hidden md:inline-block dark:text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
+                                class="hidden md:inline-block dark:text-beige border border-beige hover:bg-wine hover:border-wine hover:text-beige px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                             >
                                 Register
                             </Link>
                         </template>
-                        <Link
-                            :href="route('carrito')"
-                            class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-white dark:text-white-400 glitch"
-                            id="cart"
-                        >
+                        <Link :href="route('carrito')" class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-wine dark:text-white glitch" id="cart">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 256 256" class="w-6 h-6">
                                 <path
                                     fill="currentColor"
@@ -209,7 +205,7 @@ const navigationItems: NavigationItems[] = [
                         </Link>
 
                         <!-- Botón de menú móvil -->
-                        <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden text-[#f5f5f0] hover:text-[#c41e3a] focus:outline-none">
+                        <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden text-beige hover:text-wine focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path
                                     v-if="!isMenuOpen"
@@ -226,14 +222,14 @@ const navigationItems: NavigationItems[] = [
             </div>
 
             <!-- Menú móvil -->
-            <div v-if="isMenuOpen" class="w-full absolute bg-black/80 lg:hidden py-4 border-t border-[#f5f5f0]/10 transition-all duration-300">
+            <div v-if="isMenuOpen" class="w-full absolute bg-black/80 lg:hidden py-4 border-t border-beige/10 transition-all duration-300">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col space-y-2">
                         <template v-for="item in navigationItems" :key="item.name">
                             <a
                                 v-if="!item.subItems"
                                 :href="item.href"
-                                class="dark:text-[#f5f5f0] hover:text-[#c41e3a] px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-[#c41e3a]"
+                                class="dark:text-beige hover:text-wine px-4 py-2 text-sm font-cinzel font-medium transition-colors duration-200 border-b-2 border-transparent hover:border-wine"
                             >
                                 {{ item.name }}
                             </a>
@@ -241,7 +237,7 @@ const navigationItems: NavigationItems[] = [
                             <div v-else>
                                 <button
                                     @click="toggleMobileDropdown(item.name)"
-                                    class="flex justify-between items-center w-full text-[#f5f5f0] hover:text-[#c41e3a] px-3 py-2 text-sm font-cinzel font-medium transition-colors duration-200"
+                                    class="flex justify-between items-center w-full text-beige hover:text-wine px-3 py-2 text-sm font-cinzel font-medium transition-colors duration-200"
                                 >
                                     {{ item.name }}
                                     <ChevronDown
@@ -254,7 +250,7 @@ const navigationItems: NavigationItems[] = [
                                         <a
                                             :href="subItem.href"
                                             @click="isMenuOpen = false"
-                                            class="block px-3 py-1 text-sm font-cinzel text-[#f5f5f0] hover:text-[#c41e3a]"
+                                            class="block px-3 py-1 text-sm font-cinzel text-beige hover:text-wine"
                                         >
                                             {{ subItem.name }}
                                         </a>
@@ -264,12 +260,12 @@ const navigationItems: NavigationItems[] = [
                         </template>
 
                         <!-- Botones de autenticación móvil -->
-                        <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10 flex space-x-4">
+                        <div class="pt-4 mt-2 border-t border-beige/10 flex space-x-4">
                             <Link
                                 v-if="$page.props.auth.user"
                                 :href="route('dashboard')"
                                 @click="isMenuOpen = false"
-                                class="text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
+                                class="text-beige border border-beige hover:bg-wine hover:border-wine hover:text-beige px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                             >
                                 Dashboard
                             </Link>
@@ -277,14 +273,14 @@ const navigationItems: NavigationItems[] = [
                                 <Link
                                     :href="route('login')"
                                     @click="isMenuOpen = false"
-                                    class="text-[#f5f5f0] hover:text-[#c41e3a] px-3 py-2 text-sm font-cinzel transition-colors duration-200"
+                                    class="text-beige hover:text-wine px-3 py-2 text-sm font-cinzel transition-colors duration-200"
                                 >
                                     Iniciar sesión
                                 </Link>
                                 <Link
                                     :href="route('register')"
                                     @click="isMenuOpen = false"
-                                    class="text-[#f5f5f0] border border-[#f5f5f0] hover:bg-[#c41e3a] hover:border-[#c41e3a] hover:text-[#f5f5f0] px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
+                                    class="text-beige border border-beige hover:bg-wine hover:border-wine hover:text-beige px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                                 >
                                     Registrarse
                                 </Link>
@@ -292,14 +288,14 @@ const navigationItems: NavigationItems[] = [
                         </div>
 
                         <!-- Redes sociales móvil -->
-                        <div class="pt-4 mt-2 border-t border-[#f5f5f0]/10">
-                            <p class="text-[#f5f5f0]/70 text-xs mb-2 font-cinzel">SÍGUENOS:</p>
+                        <div class="pt-4 mt-2 border-t border-beige/10">
+                            <p class="text-beige/70 text-xs mb-2 font-cinzel">SÍGUENOS:</p>
                             <div class="flex space-x-4">
                                 <a
                                     href="https://www.facebook.com/gamerfest.ec"
                                     target="_blank"
                                     @click="isMenuOpen = false"
-                                    class="text-[#f5f5f0] hover:text-[#c41e3a] transition-colors duration-200"
+                                    class="text-beige hover:text-wine transition-colors duration-200"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                         <path
@@ -311,7 +307,7 @@ const navigationItems: NavigationItems[] = [
                                     href="https://www.instagram.com/gamerfest.ec"
                                     target="_blank"
                                     @click="isMenuOpen = false"
-                                    class="text-[#f5f5f0] hover:text-[#c41e3a] transition-colors duration-200"
+                                    class="text-beige hover:text-wine transition-colors duration-200"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                         <path

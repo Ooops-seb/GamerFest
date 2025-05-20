@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/components/Modal.vue';
 import { ref, onMounted, watch, computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
+import AuthLayout from '@/layouts/AuthLayout.vue';
 
 defineProps({
     role: {
@@ -94,7 +94,7 @@ const updatePaymentStatus = async (participante: { id: number; user_id: number; 
 <template>
     <Head title="Participantes" />
 
-    <AuthenticatedLayout>
+    <AuthLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Participantes</h2>
         </template>
@@ -192,7 +192,7 @@ const updatePaymentStatus = async (participante: { id: number; user_id: number; 
                 <img :src="'storage/' + comprobanteSeleccionado" alt="Comprobante de Pago" />
             </div>
         </Modal>
-    </AuthenticatedLayout>
+    </AuthLayout>
 </template>
 
 <style scoped>

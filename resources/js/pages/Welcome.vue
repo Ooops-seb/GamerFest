@@ -7,6 +7,7 @@ import Footer from '@/components/welcome/navigation/Footer.vue';
 import Navbar from '@/components/welcome/navigation/Navbar.vue';
 import JuegosIndividuales from '@/components/welcome/games/IndividualGames.vue';
 import { ref } from 'vue';
+import { onMounted } from 'vue';
 
 defineProps({
     juegosIndividual: {
@@ -35,6 +36,10 @@ const updateSelectedCount = (count: number) => {
 const getJuegosInscritos = () => {
     return JSON.parse(localStorage.getItem('juegosInscritos') || '[]');
 };
+
+onMounted(() => {
+    localStorage.clear();
+});
 </script>
 
 <template>
@@ -49,7 +54,7 @@ const getJuegosInscritos = () => {
                 <source :srcset="logoLight" media="(prefers-color-scheme: dark)" />
                 <img class="w-98 mx-auto" :src="logoDark" alt="Logo" />
             </picture>
-            <span class="font-cinzel text-wine dark:text-beige text-2xl select-none">Próximamente en Junio</span>
+            <span class="font-cinzel text-wine dark:text-beige text-2xl select-none">JUNIO 3, 4 y 5</span>
         </div>
         <JuegosIndividuales :juegos="juegosIndividual" :juegosGrupo="juegosGrupo" @update-selected-count="updateSelectedCount" />
         <Sponsors :sponsors="sponsors" />
