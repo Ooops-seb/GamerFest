@@ -11,7 +11,15 @@ import axios from 'axios';
 import supabase from '@/lib/supabase';
 import InputLabel from '@/components/InputLabel.vue';
 import Button from '@/components/ui/button/Button.vue';
-import { Plus } from 'lucide-vue-next';
+import { Check, Plus, Trash } from 'lucide-vue-next';
+
+const billingData = {
+    name: import.meta.env.VITE_BILLING_NAME ?? 'Gamer Fest',
+    account: import.meta.env.VITE_BILLING_ACCOUNT ?? '123456789',
+    bank: import.meta.env.VITE_BILLING_BANK ?? 'Banco Gamer',
+    ci: import.meta.env.VITE_BILLING_CI ?? '032456987',
+    type: import.meta.env.VITE_BILLING_TYPE ?? 'Ahorros',
+};
 
 interface AuthUser {
     id: number;
@@ -235,7 +243,7 @@ const getTotal = async () => {
 const updateFileName = () => {
     if (form.comprobante_pago) {
         const filename = form.comprobante_pago.name;
-        uploadedFileName.value = filename.length > 12 ? filename.slice(0, 12) + '...' : filename;
+        uploadedFileName.value = filename.length > 12 ? filename.slice(0, 12) : filename;
         isFileUploaded.value = true;
     } else {
         uploadedFileName.value = null;
@@ -492,10 +500,7 @@ onMounted(() => {
                                     <div class="inline-flex items-center text-base font-semibold">
                                         <button @click="removeJuego(index)" class="ac-delete-button group">
                                             <div class="ac-delete-wrapper">
-                                                <i
-                                                    class="fa-solid fa-trash ac-delete-icon group-hover:text-ac-wine transition-colors duration-300"
-                                                ></i>
-                                                <span class="ac-delete-message text-black dark:text-white">Eliminar</span>
+                                                <Trash class="w-4 text-wine"></Trash>
                                             </div>
                                         </button>
                                     </div>
@@ -580,7 +585,7 @@ onMounted(() => {
                         >
                     </div>
 
-                    <form class="ac-form-container" @submit.prevent="submitForm">
+                    <form class="flex flex-col py-4 gap-y-2" @submit.prevent="submitForm">
                         <input
                             v-if="state.total !== 0"
                             placeholder="Número de comprobante"
@@ -590,6 +595,9 @@ onMounted(() => {
                             id="nro_comprobante"
                             v-model="form.nro_comprobante"
                         />
+                        <span class="text-black dark:text-beige">
+                            Archivo: <small>{{ form.comprobante_pago?.name ?? 'Selecciona la imagen del comprobante (png)' }}</small>
+                        </span>
                         <div v-if="state.total !== 0" class="ac-file-container">
                             <input
                                 type="file"
@@ -604,8 +612,8 @@ onMounted(() => {
                             />
                             <label for="comprobante_pago" class="ac-file-label" id="file-label-id">
                                 <div v-if="isFileUploaded" class="flex items-center">
-                                    <i class="fa fa-check" style="padding-right: 5px"></i>
                                     <span class="text-sm">{{ uploadedFileName }}</span>
+                                    <Check></Check>
                                 </div>
                                 <div v-else class="flex items-center">
                                     <i class="fa-regular fa-folder" style="padding-right: 5px"></i>
@@ -622,11 +630,12 @@ onMounted(() => {
                             <span v-if="!form.loading">{{ state.total === 0 ? 'Realizar Inscripción' : 'Procesar Pago' }}</span>
                             <span v-else>Cargando...</span>
                         </PrimaryButton>
-                        <div v-if="state.total !== 0" class="text-ac-beige text-bold ac-account-info">
-                            <span class="text-sm text-black dark:text-white"
-                                >Es necesario realizar el deposito a la cuenta: xxxxxxxxxx Titular: Pablito Pablito Pablito Pablito - Banco Pichincha
-                                - CI: xxxxxxxxxx</span
-                            >
+                        <div v-if="state.total !== 0" class="text-beige flex flex-col">
+                            <span class="text-sm text-black dark:text-beige">Es necesario realizar el deposito a la cuenta: </span>
+                            <span class="text-xs text-black dark:text-beige">{{ billingData.bank }} - Cuenta de {{ billingData.type }}</span>
+                            <span class="text-xs text-black dark:text-beige">{{ billingData.account }} </span>
+                            <span class="text-xs text-black dark:text-beige">Titular: {{ billingData.name }}</span>
+                            <span class="text-xs text-black dark:text-beige">CI: {{ billingData.ci }}</span>
                         </div>
                     </form>
                 </div>
