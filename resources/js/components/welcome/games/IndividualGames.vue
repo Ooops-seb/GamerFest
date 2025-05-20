@@ -52,6 +52,8 @@ import { toast } from 'vue-sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { onMounted } from 'vue';
 
+const emit = defineEmits(['updateSelectedCount']);
+
 onMounted(() => {
     setTimeout(() => {
         toast('¡Mantente atento a las noticias!', {
@@ -78,12 +80,12 @@ defineProps<{
 }>();
 
 const juegosInscritos = ref(JSON.parse(localStorage.getItem('juegosInscritos') || '[]'));
-const numJuegosSeleccionados = ref(juegosInscritos.value.length);
+const juegosSeleccionados = ref<number[]>([]);
+const numJuegosSeleccionados = ref(0);
 
 watchEffect(() => {
     const local = JSON.parse(localStorage.getItem('juegosInscritos') || '[]');
     juegosInscritos.value = local;
-    numJuegosSeleccionados.value = juegosInscritos.value.length;
 });
 
 const showAlert = (gameName: string, gameId: number) => {
@@ -109,11 +111,23 @@ const showAlert = (gameName: string, gameId: number) => {
     }
 };
 
-const handleSelectionChange = (selected: boolean) => {
+watchEffect(() => {
+    emit('updateSelectedCount', numJuegosSeleccionados.value);
+});
+
+const handleSelectionChange = (selected: boolean, gameId: number) => {
+    // This ONLY handles UI selection state, not cart registration
     if (selected) {
         numJuegosSeleccionados.value++;
+        juegosSeleccionados.value.push(gameId);
     } else {
         numJuegosSeleccionados.value--;
+        const index = juegosSeleccionados.value.indexOf(gameId);
+        if (index > -1) {
+            juegosSeleccionados.value.splice(index, 1);
+        }
     }
+
+    emit('updateSelectedCount', numJuegosSeleccionados.value);
 };
 </script>
