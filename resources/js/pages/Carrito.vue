@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { reactive, onMounted, ref, watchEffect } from 'vue';
 import Swal from 'sweetalert2';
 import InputError from '@/../../resources/js/components/InputError.vue';
@@ -8,6 +8,10 @@ import PrimaryButton from '@/../../resources/js/components/PrimaryButton.vue';
 import Navbar from '@/../../resources/js/components/welcome/navigation/Navbar.vue';
 import Modal from '@/../../resources/js/components/Modal.vue';
 import axios from 'axios';
+import supabase from '@/lib/supabase';
+import InputLabel from '@/components/InputLabel.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { Plus } from 'lucide-vue-next';
 
 interface AuthUser {
     id: number;
@@ -290,9 +294,8 @@ const submitForm = async () => {
     if (valor_comprobante === '0.00') {
         nro_comprobante = 'no aplica';
     } else {
-        const nroInput = document.getElementById('nro_comprobante') as HTMLInputElement | null;
+        nro_comprobante = form.nro_comprobante;
         const fileInput = document.getElementById('comprobante_pago') as HTMLInputElement | null;
-        nro_comprobante = nroInput?.value || '';
         comprobante_pago = fileInput?.files?.[0] || null;
 
         if (!nro_comprobante) {
@@ -342,9 +345,32 @@ const submitForm = async () => {
     formData.append('estado', form.estado);
     formData.append('nro_comprobante', nro_comprobante ?? '');
     formData.append('valor_comprobante', valor_comprobante);
+    const imgName = `${form.user_id}/${nro_comprobante}_comprobante.png`;
 
     if (comprobante_pago) {
-        formData.append('comprobante_pago', comprobante_pago);
+        const { data, error } = await supabase.storage.from('inscripciones').upload(imgName, comprobante_pago, {
+            cacheControl: '3600',
+            upsert: false,
+        });
+        if (error) {
+            return Swal.fire({
+                title: 'Error',
+                text: 'Error al subir el comprobante de pago',
+                icon: 'error',
+                background: '#1a1a1a',
+                color: '#f5f5f5',
+                iconColor: '#c41e3a',
+                customClass: {
+                    popup: 'rounded-xl shadow-lg border border-[#c41e3a]',
+                    title: 'text-xl font-bold font-cinzel',
+                    htmlContainer: 'text-sm font-light',
+                    confirmButton: 'text-sm px-6 py-2',
+                },
+            });
+        }
+
+        const { data: publicData } = await supabase.storage.from('inscripciones').getPublicUrl(data.path);
+        formData.append('comprobante_pago', publicData?.publicUrl || '');
     }
 
     if (juegos.length > 3) {
@@ -383,6 +409,7 @@ const submitForm = async () => {
         });
     } catch (error) {
         let msg = 'Error inesperado al crear la inscripción';
+        await supabase.storage.from('inscripciones').remove([imgName]);
         if (axios.isAxiosError(error) && error.response) msg = error.response.data.message;
         Swal.fire({
             title: 'Error',
@@ -410,7 +437,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <title>Carrito de Compras</title>
+    <Head title="Carrito" />
     <div class="fixed top-0 left-0 w-full navbar-container animate__animated animate__fadeInDown">
         <Navbar :can-login="false" :can-register="false" :num-juegos-seleccionados="numJuegosSeleccionados" :juegos-inscritos="juegosInscritos">
         </Navbar>
@@ -420,7 +447,7 @@ onMounted(() => {
         <div class="max-w-xl mx-auto">
             <div
                 v-if="!state.loading || juegosInscritos.length == 0"
-                class="ac-container bg-gray-50 dark:bg-[#000000] transition-all duration-500 ease-in-out transform hover:scale-[1.01]"
+                class="ac-container transition-all duration-500 ease-in-out transform hover:scale-[1.01]"
                 style="margin-top: 140px"
             >
                 <div class="ac-header">
@@ -480,9 +507,9 @@ onMounted(() => {
                     <Modal :show="showModal" @close="closeModal">
                         <div class="p-6 ac-modal">
                             <h3 class="ac-modal-title">Nuevo equipo</h3>
-                            <form @submit.prevent="createTeam">
+                            <div>
                                 <div>
-                                    <InputLabel for="nombre_equipo" value="Nombre del equipo" class="text-ac-beige" />
+                                    <InputLabel for="nombre_equipo" value="Nombre del equipo" />
                                     <TextInput
                                         id="nombre_equipo"
                                         type="text"
@@ -500,18 +527,18 @@ onMounted(() => {
                                         >(Ingresa el nombre real de cada integrante uno a la vez, da click a añadir miembro. Ej. John Doe)</span
                                     >
                                     <InputError class="mt-2" :message="formEquipo.errors.miembro" />
-                                    <button
+                                    <Button
                                         type="submit"
                                         :disabled="!formEquipo.miembro"
-                                        class="flex justify-center items-center space-x-1 mt-2 bg-transparent hover:text-ac-beige text-ac-gray-light disabled:text-ac-gray disabled:cursor-not-allowed px-2 py-1 rounded transition-colors duration-300"
+                                        class="flex justify-center items-center space-x-1 mt-2 disabled:text-gray disabled:cursor-not-allowed px-2 py-1 rounded transition-colors duration-300 cursor-pointer"
                                     >
+                                        <Plus></Plus>
                                         <span>Añadir miembro</span>
-                                        <i class="fa-solid fa-plus fa-xs flex items-center"></i>
-                                    </button>
+                                    </Button>
                                 </form>
 
                                 <div v-if="miembros.length" class="mt-4">
-                                    <InputLabel value="Miembros del equipo" class="text-ac-beige" />
+                                    <InputLabel value="Miembros del equipo" />
                                     <ul class="ac-member-list">
                                         <li class="ac-member-item" v-for="(miembro, index) in miembros" :key="index">
                                             {{ miembro }}
@@ -542,7 +569,7 @@ onMounted(() => {
                                         </PrimaryButton>
                                     </template>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </Modal>
 
@@ -561,6 +588,7 @@ onMounted(() => {
                             type="text"
                             name="nro_comprobante"
                             id="nro_comprobante"
+                            v-model="form.nro_comprobante"
                         />
                         <div v-if="state.total !== 0" class="ac-file-container">
                             <input
@@ -571,7 +599,7 @@ onMounted(() => {
                                     form.comprobante_pago = ($event.target as HTMLInputElement)?.files?.[0] ?? null;
                                     updateFileName();
                                 "
-                                accept="image/jpg, image/jpeg, image/png, image/gif"
+                                accept="image/png"
                                 style="display: none"
                             />
                             <label for="comprobante_pago" class="ac-file-label" id="file-label-id">
@@ -922,7 +950,6 @@ li:hover .ac-game-title::after {
     gap: 1rem;
     margin: 0.5rem 0;
     padding: 0.6rem;
-    background-color: rgba(60, 60, 54, 0.2);
     border-left: 3px solid var(--color-wine);
 }
 
