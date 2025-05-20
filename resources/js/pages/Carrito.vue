@@ -633,7 +633,7 @@ onMounted(() => {
                             <span v-if="!form.loading">{{ state.total === 0 ? 'Realizar Inscripción' : 'Procesar Pago' }}</span>
                             <span v-else>Cargando...</span>
                         </Button>
-                        <div v-if="state.total !== 0" class="text-beige flex flex-col">
+                        <div v-if="state.total !== 0" class="text-beige flex flex-col items-center">
                             <span class="text-sm text-black dark:text-beige">Es necesario realizar el deposito a la cuenta: </span>
                             <span class="text-xs text-black dark:text-beige">{{ billingData.bank }} - Cuenta de {{ billingData.type }}</span>
                             <span class="text-xs text-black dark:text-beige">{{ billingData.account }} </span>
