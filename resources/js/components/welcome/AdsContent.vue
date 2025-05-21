@@ -21,7 +21,7 @@ import CardContent from '../ui/card/CardContent.vue';
 import CarouselPrevious from '../ui/carousel/CarouselPrevious.vue';
 import CarouselNext from '../ui/carousel/CarouselNext.vue';
 import { CarouselApi } from '../ui/carousel';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { watchOnce } from '@vueuse/core';
 import CardHeader from '../ui/card/CardHeader.vue';
 import CardDescription from '../ui/card/CardDescription.vue';
@@ -38,6 +38,8 @@ const emblaThumbnailApi = ref<CarouselApi>();
 const selectedIndex = ref(0);
 const isOpen = ref(false);
 
+let carouselInterval: ReturnType<typeof setInterval> | null = null;
+
 // Sync prop with local state
 watch(
     () => props.open,
@@ -50,6 +52,14 @@ watch(
 // Emit when local state changes (e.g., Drawer closes)
 watch(isOpen, (val) => {
     emit('update:open', val);
+    if (!val && carouselInterval) clearInterval(carouselInterval);
+    if (val && !carouselInterval) {
+        carouselInterval = setInterval(() => {
+            if (props.ads.length > 1 && isOpen.value) {
+                nextAd();
+            }
+        }, 5000);
+    }
 });
 
 function onSelect() {
@@ -62,6 +72,26 @@ function onThumbClick(index: number) {
     if (!emblaMainApi.value || !emblaThumbnailApi.value) return;
     emblaMainApi.value.scrollTo(index);
 }
+
+function nextAd() {
+    if (!emblaMainApi.value) return;
+    const total = props.ads.length;
+    const next = (emblaMainApi.value.selectedScrollSnap() + 1) % total;
+    emblaMainApi.value.scrollTo(next);
+}
+
+onMounted(() => {
+    if (carouselInterval) clearInterval(carouselInterval);
+    carouselInterval = setInterval(() => {
+        if (props.ads.length > 1 && isOpen.value) {
+            nextAd();
+        }
+    }, 5000);
+});
+
+onBeforeUnmount(() => {
+    if (carouselInterval) clearInterval(carouselInterval);
+});
 
 watchOnce(emblaMainApi, (emblaMainApi) => {
     if (!emblaMainApi) return;
