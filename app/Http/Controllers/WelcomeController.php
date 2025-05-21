@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdModel;
 use App\Models\Juego;
 use App\Models\Sponsor;
 use App\Providers\RouteServiceProvider;
@@ -49,6 +50,8 @@ class WelcomeController extends Controller
 
         $sponsors = Sponsor::all();
 
+        $ads = AdModel::all();
+
         return Inertia::render('Welcome', [
             'role' => Auth::check() && Auth::user()->hasRole("admin"),
             'canLogin' => Route::has('login'),
@@ -58,6 +61,7 @@ class WelcomeController extends Controller
             'juegosGrupo' => $juegosGrupo,
             'juegosIndividual' => $juegosIndividual,
             'sponsors' => $sponsors,
+            'ads' => $ads,
         ]);
     }
 

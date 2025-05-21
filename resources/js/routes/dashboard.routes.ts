@@ -29,7 +29,7 @@ const footerNavItems: NavItem[] = [
     },
     {
         title: 'Horarios',
-        href: '/pdf/horarios_gamerfest.png',
+        href: 'https://dqjwokefdxxejwlbivqd.supabase.co/storage/v1/object/public/resources/pdf/gamer/Evento2025.pdf',
         icon: Clock10Icon,
     },
 ];

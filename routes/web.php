@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdModelController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\WelcomeController;
@@ -30,7 +31,8 @@ Route::put('/equipos/{id}', [EquipoController::class, 'update']);
 Route::post('/get_inscripciones_by_game', [InscripcionIndividualController::class, 'get_inscripciones_by_game']);
 Route::post('/guardar_all_inscripciones', [InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
 
-
+Route::get('/ads', [AdModelController::class, 'getAds']);
+// Route::get('/ads', [AdModelController::class, 'index'])->name('ads.index');
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/settings.php';
