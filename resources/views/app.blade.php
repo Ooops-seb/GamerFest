@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Favicon para modo claro -->
-    <link rel="icon" href="{{ asset('favicon-light.ico') }}" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="{{ asset('/images/favicon-light.ico') }}" media="(prefers-color-scheme: light)">
 
     <!-- Favicon para modo oscuro -->
-    <link rel="icon" href="{{ asset('favicon-dark.ico') }}" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="{{ asset('/images/favicon-dark.ico') }}" media="(prefers-color-scheme: dark)">
 
 
     {{-- Inline script to detect system dark mode preference and apply it immediately --}}
