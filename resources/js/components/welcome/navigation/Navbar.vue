@@ -5,17 +5,12 @@ import { ref } from 'vue';
 import { route } from 'ziggy-js';
 import iconLight from '@/../../public/images/Icon2025black.webp';
 import iconDark from '@/../../public/images/Icon2025white.webp';
+import AdsContent from '../AdsContent.vue';
+import { Ads } from '@/types/api/Ad.type';
 
 const isMenuOpen = ref(false);
 const openMobileDropdown = ref<string | null>(null);
 
-const toggleMobileDropdown = (section: string) => {
-    if (openMobileDropdown.value === section) {
-        openMobileDropdown.value = null;
-    } else {
-        openMobileDropdown.value = section;
-    }
-};
 defineProps({
     role: {
         type: Boolean,
@@ -34,7 +29,29 @@ defineProps({
         type: Array,
         required: true,
     },
+    ads: {
+        type: Array<Ads>,
+        required: true,
+    },
+    adsDrawerOpen: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+const emit = defineEmits(['update:adsDrawerOpen']);
+
+function setAdsDrawerOpen(val: boolean) {
+    emit('update:adsDrawerOpen', val);
+}
+
+const toggleMobileDropdown = (section: string) => {
+    if (openMobileDropdown.value === section) {
+        openMobileDropdown.value = null;
+    } else {
+        openMobileDropdown.value = section;
+    }
+};
 
 type NavigationItems = {
     name: string;
@@ -169,6 +186,7 @@ const navigationItems: NavigationItems[] = [
                                 </div>
                             </div>
                         </template>
+                        <AdsContent :ads="ads" :open="adsDrawerOpen" @update:open="setAdsDrawerOpen" />
                     </nav>
 
                     <!-- Botones de autenticación -->
@@ -258,6 +276,7 @@ const navigationItems: NavigationItems[] = [
                                 </div>
                             </div>
                         </template>
+                        <AdsContent :ads="ads" :open="adsDrawerOpen" @update:open="setAdsDrawerOpen" />
 
                         <!-- Botones de autenticación móvil -->
                         <div class="pt-4 mt-2 border-t border-beige/10 flex space-x-4">

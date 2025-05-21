@@ -50,17 +50,8 @@ import { ref, watchEffect } from 'vue';
 import CardCheckbox from '../../CardCheckbox.vue';
 import { toast } from 'vue-sonner';
 import { Toaster } from '@/components/ui/sonner';
-import { onMounted } from 'vue';
 
 const emit = defineEmits(['updateSelectedCount']);
-
-onMounted(() => {
-    setTimeout(() => {
-        toast('¡Mantente atento a las noticias!', {
-            description: 'Pronto habrá novedades importantes para los participantes.',
-        });
-    }, 2000);
-});
 
 defineProps<{
     juegos: {

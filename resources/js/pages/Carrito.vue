@@ -12,6 +12,14 @@ import InputLabel from '@/components/InputLabel.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Check, Plus, Trash } from 'lucide-vue-next';
 import Input from '@/components/ui/input/Input.vue';
+import { Ads } from '@/types/api/Ad.type';
+
+defineProps({
+    ads: {
+        type: Array as () => Ads[],
+        default: () => [],
+    },
+});
 
 const billingData = {
     name: import.meta.env.VITE_BILLING_NAME ?? 'Gamer Fest',
@@ -450,7 +458,13 @@ onMounted(() => {
 <template>
     <Head title="Carrito" />
     <div class="fixed top-0 left-0 w-full navbar-container animate__animated animate__fadeInDown">
-        <Navbar :can-login="false" :can-register="false" :num-juegos-seleccionados="numJuegosSeleccionados" :juegos-inscritos="juegosInscritos">
+        <Navbar
+            :ads="ads"
+            :can-login="false"
+            :can-register="false"
+            :num-juegos-seleccionados="numJuegosSeleccionados"
+            :juegos-inscritos="juegosInscritos"
+        >
         </Navbar>
         <ul v-for="juego in state.juegos" :key="juego.id"></ul>
     </div>
