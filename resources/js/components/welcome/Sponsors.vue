@@ -28,7 +28,7 @@
                                 class="w-full h-full flex items-center justify-center"
                             >
                                 <img
-                                    :src="`/images/sponsors/${sponsor.url_imagen}`"
+                                    :src="sponsor.url_imagen ?? icon"
                                     :alt="sponsor.nombre"
                                     class="max-w-full max-h-full transition-opacity duration-300 hover:opacity-100"
                                 />
@@ -36,7 +36,7 @@
                         </template>
                         <template v-else>
                             <img
-                                :src="`/images/sponsors/${sponsor.url_imagen}`"
+                                :src="sponsor.url_imagen ?? icon"
                                 :alt="sponsor.nombre"
                                 class="max-w-full max-h-full transition-opacity duration-300 hover:opacity-100"
                             />
@@ -52,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import icon from '@/../../public/images/Icon2025black.webp';
+
 interface Sponsor {
     id: number;
     url_pagina: string;
