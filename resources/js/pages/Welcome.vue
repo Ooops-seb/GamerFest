@@ -10,7 +10,7 @@ import { ref, onMounted } from 'vue';
 import { onBeforeUnmount } from 'vue';
 import type { Ads } from '@/types/api/Ad.type';
 
-defineProps({
+const props = defineProps({
     juegosIndividual: {
         type: Array as () => { id: number; nombre: string; costo_inscripcion: number; img_id: string; estaInscrito: boolean }[],
         default: () => [],
@@ -46,6 +46,7 @@ const adsDrawerOpen = ref(false);
 let inactivityTimeout: ReturnType<typeof setTimeout> | null = null;
 
 function openAdsDrawer() {
+    if (props.ads.length === 0) return;
     adsDrawerOpen.value = true;
 }
 
