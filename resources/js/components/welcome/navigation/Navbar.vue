@@ -209,7 +209,7 @@ const navigationItems: NavigationItems[] = [
                                 :href="route('register')"
                                 class="hidden md:inline-block dark:text-beige border border-beige hover:bg-wine hover:border-wine hover:text-beige px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
                             >
-                                Register
+                                Registrarse
                             </Link>
                         </template>
                         <Link :href="route('carrito')" class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-wine dark:text-white glitch" id="cart">

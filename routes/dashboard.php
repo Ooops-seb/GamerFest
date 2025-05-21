@@ -6,7 +6,7 @@ use App\Http\Controllers\InscripcionIndividualController;
 use App\Http\Controllers\DashboardController;
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('Dashboard');
     })->middleware(['role:admin,inscripciones'])->name('dashboard');
