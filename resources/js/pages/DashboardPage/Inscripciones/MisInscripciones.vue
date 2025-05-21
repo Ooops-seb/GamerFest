@@ -3,6 +3,7 @@ import HelperText from '@/components/HelperText.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import icon from '@/../../public/images/Icon2025black.webp';
 
 interface Inscripcion {
     img_id: string;
@@ -48,7 +49,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     class="relative overflow-hidden rounded-full border-2 border-beige/30 transition-all duration-300 hover:border-wine"
                                 >
                                     <img
-                                        :src="'/images/' + inscripcion.img_id + '.jpg'"
+                                        :src="inscripcion.img_id ?? icon"
                                         alt="imagen del juego"
                                         class="w-16 h-16 rounded-full object-cover transition-transform duration-500 hover:scale-110"
                                     />
