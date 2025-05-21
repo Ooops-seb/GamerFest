@@ -13,6 +13,7 @@ import Button from '@/components/ui/button/Button.vue';
 import { Check, Plus, Trash } from 'lucide-vue-next';
 import Input from '@/components/ui/input/Input.vue';
 import { Ads } from '@/types/api/Ad.type';
+import icon from '@/../../public/images/Icon2025black.webp';
 
 defineProps({
     ads: {
@@ -486,7 +487,7 @@ onMounted(() => {
                                 <div class="flex justify-between items-center space-x-4 sm:space-x-6 sm:space-y-4 mb-4 sm:mb-0 part-1">
                                     <div class="flex-shrink-0 relative">
                                         <div class="ac-image-frame"></div>
-                                        <img class="w-20 h-18 rounded-none ac-image" :src="'/images/' + juego.img_id + '.jpg'" alt="Game image" />
+                                        <img class="w-20 h-18 rounded-none ac-image" :src="`${juego.img_id ?? icon}`" alt="Game image" />
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-ac-beige truncate ac-game-title">

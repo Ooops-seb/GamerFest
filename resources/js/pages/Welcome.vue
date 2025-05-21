@@ -61,7 +61,7 @@ onMounted(() => {
     // Abrir Drawer al entrar
     setTimeout(() => {
         openAdsDrawer();
-    }, 2000);
+    }, 3000);
     // Detectar inactividad
     window.addEventListener('mousemove', resetInactivityTimer);
     window.addEventListener('keydown', resetInactivityTimer);
