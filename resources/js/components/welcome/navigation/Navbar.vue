@@ -186,7 +186,7 @@ const navigationItems: NavigationItems[] = [
                                 </div>
                             </div>
                         </template>
-                        <AdsContent :ads="ads" :open="adsDrawerOpen" @update:open="setAdsDrawerOpen" />
+                        <AdsContent v-if="ads.length > 0" :ads="ads" :open="adsDrawerOpen" @update:open="setAdsDrawerOpen" />
                     </nav>
 
                     <!-- Botones de autenticación -->
@@ -276,7 +276,7 @@ const navigationItems: NavigationItems[] = [
                                 </div>
                             </div>
                         </template>
-                        <AdsContent :ads="ads" :open="adsDrawerOpen" @update:open="setAdsDrawerOpen" />
+                        <AdsContent v-if="ads.length > 0" :ads="ads" :open="adsDrawerOpen" @update:open="setAdsDrawerOpen" />
 
                         <!-- Botones de autenticación móvil -->
                         <div class="pt-4 mt-2 border-t border-beige/10 flex space-x-4">
