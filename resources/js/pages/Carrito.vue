@@ -365,7 +365,7 @@ const submitForm = async () => {
     formData.append('estado', form.estado);
     formData.append('nro_comprobante', nro_comprobante ?? '');
     formData.append('valor_comprobante', valor_comprobante);
-    const imgName = `${form.user_id}/${nro_comprobante}_comprobante.png`;
+    const imgName = `${form.user_id}/${nro_comprobante}_comprobante`;
 
     if (comprobante_pago) {
         const { data, error } = await supabase.storage.from('inscripciones').upload(imgName, comprobante_pago, {
@@ -614,7 +614,7 @@ onMounted(() => {
                             v-model="form.nro_comprobante"
                         />
                         <span class="text-black dark:text-beige">
-                            Archivo: <small>{{ form.comprobante_pago?.name ?? 'Selecciona la imagen del comprobante (png)' }}</small>
+                            Archivo: <small>{{ form.comprobante_pago?.name ?? 'Selecciona la imagen del comprobante (png/jpg)' }}</small>
                         </span>
                         <div v-if="state.total !== 0" class="ac-file-container">
                             <Input
@@ -625,7 +625,7 @@ onMounted(() => {
                                     form.comprobante_pago = ($event.target as HTMLInputElement)?.files?.[0] ?? null;
                                     updateFileName();
                                 "
-                                accept="image/png"
+                                accept="image/png, image/jpeg, image/jpg"
                                 style="display: none"
                             />
                             <label for="comprobante_pago" class="ac-file-label" id="file-label-id">
