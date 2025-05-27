@@ -15,7 +15,8 @@ class Juego extends Model
         'costo_inscripcion',
         'fecha_limite_inscripcion',
         'modalidad',
-        'img_id'
+        'img_id',
+        'reglamentos_pdf',
     ];
 
     // En Juego.php
