@@ -3,7 +3,6 @@
         <h2 class="mb-4 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 relative">
             Listado Juegos Individuales
         </h2>
-        <!-- <div class="help-text mb-8">Selecciona los juegos para añadir a tú carrito...</div> -->
         <!-- Depuración: Mostrar el array juegos -->
         <div class="w-full flex flex-wrap gap-4 justify-center">
             <div v-for="juego in juegos" :key="juego.id">
@@ -19,12 +18,21 @@
                         @showAlert="showAlert"
                     />
                 </div>
+                <a
+                    v-if="juego.reglamentos_pdf"
+                    :href="juego.reglamentos_pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mx-auto inline-flex items-center px-3 py-2 text-sm font-medium text-center text-wine hover:text-wine transition-colors"
+                >
+                    <i class="fa-solid fa-book ml-14"></i>Reglamento
+                </a>
             </div>
         </div>
         <h2 class="mt-4 mx-2 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 relative">
             Listado Juegos Grupales
         </h2>
-        <!-- <div class="help-text mb-8">Selecciona algún juego grupal, únicamente es necesario la inscripción del capitan...</div> -->
+
         <div class="w-full flex flex-wrap gap-4 justify-center">
             <div v-for="juego in juegosGrupo" :key="juego.id">
                 <div class="flex flex-col items-center mb-4">
@@ -39,6 +47,15 @@
                         @showAlert="showAlert"
                     />
                 </div>
+                <a
+                    v-if="juego.reglamentos_pdf"
+                    :href="juego.reglamentos_pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mx-auto inline-flex items-center px-3 py-2 text-sm font-medium text-center text-wine hover:text-wine transition-colors"
+                >
+                    <i class="fa-solid fa-book ml-14"></i>Reglamento
+                </a>
             </div>
         </div>
         <Toaster />
@@ -61,6 +78,7 @@ defineProps<{
         costo_inscripcion: number;
         img_id: string;
         estaInscrito: boolean;
+        reglamentos_pdf: string;
     }[];
     juegosGrupo: {
         id: number;
@@ -68,6 +86,7 @@ defineProps<{
         costo_inscripcion: number;
         img_id: string;
         estaInscrito: boolean;
+        reglamentos_pdf: string;
     }[];
 }>();
 
