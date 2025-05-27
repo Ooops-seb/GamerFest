@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->date('fecha_limite_inscripcion');
             $table->enum('modalidad', ['individual', 'grupo']);
             $table->string('img_id', 20)->default('sample_img');
-
             $table->timestamps();
         });
     }
