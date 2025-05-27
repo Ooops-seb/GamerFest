@@ -23,9 +23,9 @@
                     :href="juego.reglamentos_pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="mx-auto inline-flex items-center px-3 py-2 text-sm font-medium text-center text-wine hover:text-wine transition-colors"
+                    class="mx-auto inline-flex items-center px-3 py-2 text-sm font-bold text-center text-wine dark:text-white transition-colors"
                 >
-                    <i class="fa-solid fa-book ml-14"></i>Reglamento
+                    <Book></Book><span class="pl-2 font-cinzel">Reglamento</span>
                 </a>
             </div>
         </div>
@@ -68,6 +68,7 @@ import CardCheckbox from '../../CardCheckbox.vue';
 import { toast } from 'vue-sonner';
 import { Toaster } from '@/components/ui/sonner';
 import icon from '@/../../public/images/Icon2025black.webp';
+import { Book } from 'lucide-vue-next';
 
 const emit = defineEmits(['updateSelectedCount']);
 
