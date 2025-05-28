@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { type BreadcrumbItem, type SharedData, type User } from '@/types';
+import { LoaderCircle } from 'lucide-vue-next';
 
 interface Props {
     mustVerifyEmail: boolean;
@@ -99,7 +100,7 @@ const submit = () => {
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <Button :disabled="form.processing">Guardar</Button>
+                        <Button :disabled="form.processing"><LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />Guardar</Button>
 
                         <Transition
                             enter-active-class="transition ease-in-out"
