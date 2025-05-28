@@ -52,9 +52,9 @@
                     :href="juego.reglamentos_pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="mx-auto inline-flex items-center px-3 py-2 text-sm font-medium text-center text-wine hover:text-wine transition-colors"
+                    class="mt-4 mx-2 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 relative"
                 >
-                    <i class="fa-solid fa-book ml-14"></i>Reglamento
+                    <Book></Book><span class="pl-2 font-cinzel">Reglamento</span>
                 </a>
             </div>
         </div>
