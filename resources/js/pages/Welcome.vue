@@ -12,15 +12,31 @@ import type { Ads } from '@/types/api/Ad.type';
 
 const props = defineProps({
     juegosIndividual: {
-        type: Array as () => { id: number; nombre: string; costo_inscripcion: number; img_id: string; estaInscrito: boolean }[],
+        type: Array as () => {
+            id: number;
+            nombre: string;
+            costo_inscripcion: number;
+            img_id: string;
+            estaInscrito: boolean;
+            reglamentos_pdf: string;
+            active: boolean;
+        }[],
         default: () => [],
     },
     juegosGrupo: {
-        type: Array as () => { id: number; nombre: string; costo_inscripcion: number; img_id: string; estaInscrito: boolean }[],
+        type: Array as () => {
+            id: number;
+            nombre: string;
+            costo_inscripcion: number;
+            img_id: string;
+            estaInscrito: boolean;
+            reglamentos_pdf: string;
+            active: boolean;
+        }[],
         default: () => [],
     },
     sponsors: {
-        type: Array as () => { id: number; url_pagina: string; url_imagen: string; nombre: string }[],
+        type: Array as () => { id: number; url_pagina: string; url_imagen: string; nombre: string; active: boolean }[],
         default: () => [],
     },
     ads: {
@@ -54,7 +70,7 @@ function resetInactivityTimer() {
     if (inactivityTimeout) clearTimeout(inactivityTimeout);
     inactivityTimeout = setTimeout(() => {
         openAdsDrawer();
-    }, 20000); // 20 segundos de inactividad
+    }, 20000);
 }
 
 onMounted(() => {

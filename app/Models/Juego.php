@@ -17,6 +17,8 @@ class Juego extends Model
         'modalidad',
         'img_id',
         'reglamentos_pdf',
+        'active',
+        'max_participantes',
     ];
 
     // En Juego.php
