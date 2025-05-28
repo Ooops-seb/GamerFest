@@ -52,7 +52,7 @@
                     :href="juego.reglamentos_pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="mt-4 mx-2 text-2xl md:text-4xl font-bold text-wine text-center font-cinzel tracking-[2px] uppercase pb-2 relative"
+                    class="mx-auto inline-flex items-center px-3 py-2 text-sm font-bold text-center text-wine dark:text-white transition-colors"
                 >
                     <Book></Book><span class="pl-2 font-cinzel">Reglamento</span>
                 </a>
