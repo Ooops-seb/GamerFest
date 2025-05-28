@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { type BreadcrumbItem, type SharedData, type User } from '@/types';
+import { LoaderCircle } from 'lucide-vue-next';
 
 interface Props {
     mustVerifyEmail: boolean;
@@ -28,9 +29,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
 
+console.log('user', user);
+
 const form = useForm({
     name: user.name,
     email: user.email,
+    phone: user.phone,
 });
 
 const submit = () => {
@@ -52,6 +56,12 @@ const submit = () => {
                     <div class="grid gap-2">
                         <Label for="name">Nombre</Label>
                         <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Nombre completo" />
+                        <InputError class="mt-2" :message="form.errors.name" />
+                    </div>
+
+                    <div class="grid gap-2">
+                        <Label for="phone">Teléfono</Label>
+                        <Input id="phone" class="mt-1 block w-full" v-model="form.phone" required autocomplete="phone" placeholder="Teléfono" />
                         <InputError class="mt-2" :message="form.errors.name" />
                     </div>
 
@@ -90,7 +100,7 @@ const submit = () => {
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <Button :disabled="form.processing">Guardar</Button>
+                        <Button :disabled="form.processing"><LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />Guardar</Button>
 
                         <Transition
                             enter-active-class="transition ease-in-out"
