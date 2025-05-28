@@ -21,7 +21,7 @@ import CardContent from '../ui/card/CardContent.vue';
 import CarouselPrevious from '../ui/carousel/CarouselPrevious.vue';
 import CarouselNext from '../ui/carousel/CarouselNext.vue';
 import { CarouselApi } from '../ui/carousel';
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue';
 import { watchOnce } from '@vueuse/core';
 import CardHeader from '../ui/card/CardHeader.vue';
 import CardDescription from '../ui/card/CardDescription.vue';
@@ -100,6 +100,8 @@ watchOnce(emblaMainApi, (emblaMainApi) => {
     emblaMainApi.on('select', onSelect);
     emblaMainApi.on('reInit', onSelect);
 });
+
+const filteredAds = computed(() => props.ads.filter((ad) => ad.active));
 </script>
 
 <template>
@@ -121,7 +123,7 @@ watchOnce(emblaMainApi, (emblaMainApi) => {
                     <div class="w-full sm:w-auto">
                         <Carousel class="relative w-full max-w-xs" @init-api="(val) => (emblaMainApi = val)">
                             <CarouselContent>
-                                <CarouselItem v-for="(ad, index) in ads" :key="index">
+                                <CarouselItem v-for="(ad, index) in filteredAds" :key="index">
                                     <div class="p-1">
                                         <Card>
                                             <CardHeader>{{ ad.title }}</CardHeader>
@@ -140,7 +142,7 @@ watchOnce(emblaMainApi, (emblaMainApi) => {
                         <Carousel class="relative w-full max-w-xs" @init-api="(val) => (emblaThumbnailApi = val)">
                             <CarouselContent class="flex gap-1 ml-0">
                                 <CarouselItem
-                                    v-for="(ad, index) in ads"
+                                    v-for="(ad, index) in filteredAds"
                                     :key="index"
                                     class="pl-0 basis-1/4 cursor-pointer"
                                     @click="onThumbClick(index)"
