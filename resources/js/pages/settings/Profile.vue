@@ -28,9 +28,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 const page = usePage<SharedData>();
 const user = page.props.auth.user as User;
 
+console.log('user', user);
+
 const form = useForm({
     name: user.name,
     email: user.email,
+    phone: user.phone,
 });
 
 const submit = () => {
@@ -52,6 +55,12 @@ const submit = () => {
                     <div class="grid gap-2">
                         <Label for="name">Nombre</Label>
                         <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Nombre completo" />
+                        <InputError class="mt-2" :message="form.errors.name" />
+                    </div>
+
+                    <div class="grid gap-2">
+                        <Label for="phone">Teléfono</Label>
+                        <Input id="phone" class="mt-1 block w-full" v-model="form.phone" required autocomplete="phone" placeholder="Teléfono" />
                         <InputError class="mt-2" :message="form.errors.name" />
                     </div>
 
