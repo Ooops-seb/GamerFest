@@ -2,23 +2,17 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
-// Importar componentes de shadcn/ui
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-// Importar iconos de Lucide
 import { Users as UsersIcon, Package as PackageIcon, CreditCard as CreditCardIcon, Activity as ActivityIcon } from 'lucide-vue-next';
 
-// Importar los nuevos componentes de gráfica
 import InscritosPorJuegoBarChart from '@/components/dashboard/InscritosPorJuegoBarChart.vue';
 
-// Tipado para los datos de inscripciones del dashboard
 interface InscripcionesDashboardData {
     ingresos_totales: number;
     numero_inscripciones_grupales: number;
@@ -26,11 +20,19 @@ interface InscripcionesDashboardData {
     numero_inscripciones_totales: number;
 }
 
-// Obtener datos del backend (ingresos, inscripciones, etc) usando Inertia
 const page = usePage<{
     inscripciones_data?: InscripcionesDashboardData;
     total_sponsors?: number;
     total_usuarios?: number;
+    ultimas_inscripciones?: Array<{
+        tipo: string;
+        nombre: string;
+        telefono: string;
+        juego: string;
+        equipo?: string;
+        fecha: string;
+        estado_pago: string;
+    }>;
 }>();
 
 const inscripcionesData = computed(
@@ -88,70 +90,14 @@ const statsExtra = computed(() => [
     },
 ]);
 
-// Datos de transacciones
-const transactions = ref([
-    {
-        id: 1,
-        client: 'Ana Martínez',
-        product: 'Producto Premium',
-        date: '2024-01-15',
-        status: 'Completado',
-        amount: 1299,
-    },
-    {
-        id: 2,
-        client: 'Carlos López',
-        product: 'Servicio Básico',
-        date: '2024-01-14',
-        status: 'Pendiente',
-        amount: 599,
-    },
-    {
-        id: 3,
-        client: 'María González',
-        product: 'Producto Estándar',
-        date: '2024-01-14',
-        status: 'Completado',
-        amount: 899,
-    },
-    {
-        id: 4,
-        client: 'José Rodríguez',
-        product: 'Servicio Premium',
-        date: '2024-01-13',
-        status: 'Cancelado',
-        amount: 1599,
-    },
-    {
-        id: 5,
-        client: 'Laura Fernández',
-        product: 'Producto Básico',
-        date: '2024-01-13',
-        status: 'Completado',
-        amount: 399,
-    },
-]);
-
-// Tipar parámetro status en getStatusVariant
-const getStatusVariant = (status: string) => {
-    switch (status) {
-        case 'Completado':
-            return 'default';
-        case 'Pendiente':
-            return 'secondary';
-        case 'Cancelado':
-            return 'destructive';
-        default:
-            return 'outline';
-    }
-};
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
     },
 ];
+
+const ultimasInscripciones = computed(() => page.props.ultimas_inscripciones ?? []);
 </script>
 
 <template>
@@ -194,7 +140,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </div>
 
             <!-- Gráfica de inscritos por juego (Barra) -->
-            <div class="my-8">
+            <div class="my-12">
                 <InscritosPorJuegoBarChart />
             </div>
 
@@ -202,39 +148,41 @@ const breadcrumbs: BreadcrumbItem[] = [
             <Card>
                 <CardHeader>
                     <div class="flex items-center justify-between">
-                        <CardTitle>Transacciones Recientes</CardTitle>
-                        <Button variant="outline" size="sm">Ver todas</Button>
+                        <CardTitle>Inscripciones Recientes</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Cliente</TableHead>
-                                <TableHead>Producto</TableHead>
+                                <TableHead>Nombre</TableHead>
+                                <TableHead>Juego</TableHead>
+                                <TableHead>Modalidad</TableHead>
+                                <TableHead>Equipo</TableHead>
                                 <TableHead>Fecha</TableHead>
-                                <TableHead>Estado</TableHead>
-                                <TableHead class="text-right">Monto</TableHead>
+                                <TableHead>Estado Pago</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow v-for="transaction in transactions" :key="transaction.id">
+                            <TableRow v-for="(insc, i) in ultimasInscripciones" :key="i">
+                                <TableCell>{{ insc.nombre }}</TableCell>
+                                <TableCell>{{ insc.juego }}</TableCell>
+                                <TableCell>{{ insc.tipo }}</TableCell>
+                                <TableCell>{{ insc.tipo === 'Grupal' ? insc.equipo : '-' }}</TableCell>
+                                <TableCell>{{ insc.fecha }}</TableCell>
                                 <TableCell>
-                                    <div class="flex items-center space-x-3">
-                                        <Avatar class="h-8 w-8">
-                                            <AvatarFallback>{{ transaction.client.charAt(0) }}</AvatarFallback>
-                                        </Avatar>
-                                        <span class="font-medium">{{ transaction.client }}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{{ transaction.product }}</TableCell>
-                                <TableCell>{{ transaction.date }}</TableCell>
-                                <TableCell>
-                                    <Badge :variant="getStatusVariant(transaction.status)">
-                                        {{ transaction.status }}
+                                    <Badge
+                                        :variant="
+                                            insc.estado_pago === 'verificado'
+                                                ? 'default'
+                                                : insc.estado_pago === 'pendiente'
+                                                  ? 'secondary'
+                                                  : 'destructive'
+                                        "
+                                    >
+                                        {{ insc.estado_pago }}
                                     </Badge>
                                 </TableCell>
-                                <TableCell class="text-right font-semibold"> ${{ transaction.amount.toLocaleString() }} </TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

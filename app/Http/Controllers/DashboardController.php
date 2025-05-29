@@ -47,6 +47,38 @@ class DashboardController extends Controller
         $totalSponsors = Sponsor::count();
         $totalUsuarios = User::count();
 
+        // Obtener las 10 últimas inscripciones (mezcla de individuales y grupales)
+        $ultimasIndividuales = InscripcionIndividual::with('user', 'juego')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get()
+            ->map(function ($inscripcion) {
+                return [
+                    'tipo' => 'Individual',
+                    'nombre' => $inscripcion->user ? $inscripcion->user->name : '',
+                    'telefono' => $inscripcion->user ? $inscripcion->user->phone : '',
+                    'juego' => $inscripcion->juego ? $inscripcion->juego->nombre : '',
+                    'fecha' => $inscripcion->created_at ? $inscripcion->created_at->format('Y-m-d H:i') : '',
+                    'estado_pago' => $inscripcion->estado_pago,
+                ];
+            });
+        $ultimasGrupales = InscripcionGrupal::with('equipo.user', 'juego')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get()
+            ->map(function ($inscripcion) {
+                return [
+                    'tipo' => 'Grupal',
+                    'nombre' => $inscripcion->equipo && $inscripcion->equipo->user ? $inscripcion->equipo->user->name : '',
+                    'telefono' => $inscripcion->equipo && $inscripcion->equipo->user ? $inscripcion->equipo->user->phone : '',
+                    'juego' => $inscripcion->juego ? $inscripcion->juego->nombre : '',
+                    'equipo' => $inscripcion->equipo ? $inscripcion->equipo->nombre_equipo : '',
+                    'fecha' => $inscripcion->created_at ? $inscripcion->created_at->format('Y-m-d H:i') : '',
+                    'estado_pago' => $inscripcion->estado_pago,
+                ];
+            });
+        $ultimasInscripciones = collect($ultimasIndividuales)->merge($ultimasGrupales)->sortByDesc('fecha')->take(10)->values();
+
         return Inertia::render('Dashboard', [
             'role' => Auth::check() && Auth::user()->hasRole("admin"),
             'canRegister' => Route::has('register'),
@@ -56,6 +88,7 @@ class DashboardController extends Controller
             'inscritos_por_juego' => $inscritosPorJuego,
             'total_sponsors' => $totalSponsors,
             'total_usuarios' => $totalUsuarios,
+            'ultimas_inscripciones' => $ultimasInscripciones,
         ]);
     }
 
