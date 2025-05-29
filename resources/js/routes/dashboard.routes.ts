@@ -10,6 +10,12 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
+        title: 'Participantes',
+        href: '/participantes',
+        requiredAdmin: true,
+        icon: Gamepad2,
+    },
+    {
         title: 'Mis Inscripciones',
         href: '/mis_inscripciones',
         icon: Gamepad2,
