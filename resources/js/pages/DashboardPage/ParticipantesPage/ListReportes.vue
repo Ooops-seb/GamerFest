@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Modal from '@/components/Modal.vue';
 import { ref, onMounted, watch, computed } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import axios from 'axios';
 import { BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -49,6 +49,14 @@ const loadingGames = ref(false);
 const loadingInscriptions = ref(false);
 const loadingReport = ref(false);
 const loadingPago = ref<number | null>(null);
+
+const form = useForm({
+    id: 0,
+    user_id: 0,
+    id_juego: 0,
+    estado_pago: '',
+    modalidad: '',
+});
 
 const hasTeamMembers = computed(() => {
     return inscripciones.value.some((inscripcion: { equipo?: { miembros?: any } }) => inscripcion.equipo && inscripcion.equipo.miembros);
@@ -120,22 +128,33 @@ const updateInscriptions = async () => {
     }
 };
 
-const updatePaymentStatus = async (participante: { id: number; user_id: number; id_juego: number; estado_pago: string }) => {
+const updatePaymentStatus = (participante: { id: number; user_id: number; id_juego: number; estado_pago: string; modalidad?: string }) => {
     loadingPago.value = participante.id;
-    try {
-        await axios.post('/update_pago', {
-            id: participante.id,
-            user_id: participante.user_id,
-            id_juego: participante.id_juego,
-            estado_pago: participante.estado_pago,
-        });
-        toast('Estado actualizado', {
-            description: 'El estado del pago ha sido actualizado.',
-        });
-        message.value = '';
-    } finally {
-        loadingPago.value = null;
-    }
+
+    // Configurar el formulario con los datos necesarios
+    form.id = participante.id;
+    form.user_id = participante.user_id;
+    form.id_juego = participante.id_juego;
+    form.estado_pago = participante.estado_pago;
+    form.modalidad = participante.modalidad || 'Individual'; // Por defecto Individual si no se especifica
+
+    form.post('/inscripciones/actualizar-estado', {
+        preserveScroll: true,
+        onSuccess: () => {
+            toast('Estado actualizado', {
+                description: 'El estado del pago ha sido actualizado.',
+            });
+            message.value = '';
+        },
+        onError: (errors) => {
+            toast('Error al actualizar', {
+                description: errors?.message || 'No se pudo actualizar el estado.',
+            });
+        },
+        onFinish: () => {
+            loadingPago.value = null;
+        },
+    });
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -275,8 +294,15 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         </Button>
                                     </div>
                                 </TableCell>
-                                <TableCell v-if="hasTeamMembers" class="px-6 py-4 whitespace-nowrap text-sm text-gray dark:text-gray-light">
-                                    {{ participante.equipo ? participante.equipo.miembros : '' }}
+                                <TableCell v-if="hasTeamMembers" class="px-6 py-4 text-sm text-gray dark:text-gray-light">
+                                    <div v-if="participante.equipo && participante.equipo.miembros">
+                                        <ul class="list-disc pl-5">
+                                            <li v-for="(miembro, index) in JSON.parse(participante.equipo.miembros)" :key="index" class="mb-1">
+                                                {{ miembro }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <span v-else>-</span>
                                 </TableCell>
                                 <TableCell class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-wine">
                                     ${{ parseFloat(participante.valor_comprobante).toFixed(2) }}
@@ -291,6 +317,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                                                     user_id: participante.user?.id || 0,
                                                     id_juego: selectedGame || 0,
                                                     estado_pago: participante.estado_pago,
+                                                    modalidad: participante.equipo ? 'Grupal' : 'Individual',
                                                 })
                                         "
                                         :disabled="loadingPago === participante.id"
