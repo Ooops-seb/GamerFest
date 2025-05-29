@@ -121,9 +121,9 @@ class DashboardController extends Controller
     }
 
 
-    public function list_participantes()
+    public function list_reportes()
     {
-        return Inertia::render('DashboardPage/ParticipantesPage/ListParticipantes', [
+        return Inertia::render('DashboardPage/ParticipantesPage/ListReportes', [
             'role' => Auth::user()->hasRole("admin"),
         ]);
     }
@@ -140,12 +140,12 @@ class DashboardController extends Controller
     public function get_comprobante($rutaImagen)
     {
         // Verificamos que el archivo exista
-        if (Storage::exists('/app/' + $rutaImagen)) {
+        if (Storage::exists('/app/' . $rutaImagen)) {
             // Obtenemos el contenido del archivo
-            $file = Storage::get('/app/' + $rutaImagen);
+            $file = Storage::get('/app/' . $rutaImagen);
 
             // Creamos una respuesta con el contenido del archivo
-            $response = new Response($file, 200);
+            $response = response($file, 200);
 
             // Definimos el tipo de contenido en la respuesta
             $response->header("Content-Type", Storage::mimeType($rutaImagen));

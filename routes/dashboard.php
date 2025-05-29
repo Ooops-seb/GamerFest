@@ -15,9 +15,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mis_inscripciones', [InscripcionIndividualController::class, 'get_mis_inscripciones'])->name('inscripciones');
     Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])->name('mis_equipos');
 
-    Route::get('/participantes', [DashboardController::class, 'list_participantes'])
+    Route::get('/reportes', [DashboardController::class, 'list_reportes'])
         ->middleware('role:admin')
-        ->name('participantes');
+        ->name('reportes');
 
     Route::post('/report_participantes_by_game', [ReportesController::class, 'report_participantes_by_game'])
         ->middleware('role:admin');

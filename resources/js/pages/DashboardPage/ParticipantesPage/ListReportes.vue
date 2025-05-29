@@ -140,14 +140,14 @@ const updatePaymentStatus = async (participante: { id: number; user_id: number; 
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Participantes',
-        href: '/participantes',
+        title: 'Reportes',
+        href: '/reportes',
     },
 ];
 </script>
 
 <template>
-    <Head title="Participantes" />
+    <Head title="Reportes" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="py-12 animate__animated animate__fadeInUp">
