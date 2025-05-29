@@ -6,11 +6,10 @@ import Sponsors from '@/components/welcome/Sponsors.vue';
 import Footer from '@/components/welcome/navigation/Footer.vue';
 import Navbar from '@/components/welcome/navigation/Navbar.vue';
 import JuegosIndividuales from '@/components/welcome/games/IndividualGames.vue';
-import { ref, onMounted } from 'vue';
-import { onBeforeUnmount } from 'vue';
+import { ref } from 'vue';
 import type { Ads } from '@/types/api/Ad.type';
 
-const props = defineProps({
+defineProps({
     juegosIndividual: {
         type: Array as () => {
             id: number;
@@ -57,42 +56,6 @@ const updateSelectedCount = (count: number) => {
 const getJuegosInscritos = () => {
     return JSON.parse(localStorage.getItem('juegosInscritos') || '[]');
 };
-
-const adsDrawerOpen = ref(false);
-let inactivityTimeout: ReturnType<typeof setTimeout> | null = null;
-
-function openAdsDrawer() {
-    if (props.ads.length === 0) return;
-    adsDrawerOpen.value = true;
-}
-
-function resetInactivityTimer() {
-    if (inactivityTimeout) clearTimeout(inactivityTimeout);
-    inactivityTimeout = setTimeout(() => {
-        openAdsDrawer();
-    }, 20000);
-}
-
-onMounted(() => {
-    localStorage.clear();
-    // Abrir Drawer al entrar
-    setTimeout(() => {
-        openAdsDrawer();
-    }, 3000);
-    // Detectar inactividad
-    window.addEventListener('mousemove', resetInactivityTimer);
-    window.addEventListener('keydown', resetInactivityTimer);
-    window.addEventListener('mousedown', resetInactivityTimer);
-    resetInactivityTimer();
-});
-
-// Limpieza
-onBeforeUnmount(() => {
-    if (inactivityTimeout) clearTimeout(inactivityTimeout);
-    window.removeEventListener('mousemove', resetInactivityTimer);
-    window.removeEventListener('keydown', resetInactivityTimer);
-    window.removeEventListener('mousedown', resetInactivityTimer);
-});
 </script>
 
 <template>
@@ -101,13 +64,7 @@ onBeforeUnmount(() => {
         id="nav"
         class="flex min-h-screen flex-col items-center justify-center bg-beige bg-[url('/public/images/texture.webp')] dark:bg-none pb-6 text-[#1b1b18] lg:pb-8 dark:bg-black"
     >
-        <Navbar
-            :ads="ads"
-            :numJuegosSeleccionados="selectedGamesCount"
-            :juegosInscritos="getJuegosInscritos()"
-            :adsDrawerOpen="adsDrawerOpen"
-            @update:adsDrawerOpen="adsDrawerOpen = $event"
-        />
+        <Navbar :ads="ads" :numJuegosSeleccionados="selectedGamesCount" :juegosInscritos="getJuegosInscritos()" />
         <div class="my-8 flex flex-col items-center justify-center opacity-100 transition-opacity duration-750 starting:opacity-0">
             <picture class="select-none pointer-events-none">
                 <source :srcset="logoLight" media="(prefers-color-scheme: dark)" />
