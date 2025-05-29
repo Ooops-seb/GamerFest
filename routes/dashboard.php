@@ -9,9 +9,9 @@ use App\Http\Controllers\PagosController;
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->middleware(['role:admin,inscripciones'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])
+        ->middleware(['role:admin,inscripciones'])
+        ->name('dashboard');
     Route::get('/mis_inscripciones', [InscripcionIndividualController::class, 'get_mis_inscripciones'])->name('inscripciones');
     Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])->name('mis_equipos');
 
