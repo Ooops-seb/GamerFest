@@ -5,6 +5,20 @@ import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
 import { BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/AppLayout.vue';
+import TableHeader from '@/components/ui/table/TableHeader.vue';
+import TableRow from '@/components/ui/table/TableRow.vue';
+import TableCell from '@/components/ui/table/TableCell.vue';
+import Table from '@/components/ui/table/Table.vue';
+import Select from '@/components/ui/select/Select.vue';
+import SelectTrigger from '@/components/ui/select/SelectTrigger.vue';
+import SelectContent from '@/components/ui/select/SelectContent.vue';
+import SelectItem from '@/components/ui/select/SelectItem.vue';
+import SelectValue from '@/components/ui/select/SelectValue.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { EyeIcon, XIcon, PointerIcon } from 'lucide-vue-next';
+import UiLoader from '@/components/ui/UiLoader.vue';
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'vue-sonner';
 
 defineProps({
     role: {
@@ -29,6 +43,12 @@ const inscripciones = ref<
 const message = ref('');
 const comprobanteSeleccionado = ref('');
 const showModal = ref(false);
+const comprobanteImgLoading = ref(false);
+
+const loadingGames = ref(false);
+const loadingInscriptions = ref(false);
+const loadingReport = ref(false);
+const loadingPago = ref<number | null>(null);
 
 const hasTeamMembers = computed(() => {
     return inscripciones.value.some((inscripcion: { equipo?: { miembros?: any } }) => inscripcion.equipo && inscripcion.equipo.miembros);
@@ -36,7 +56,12 @@ const hasTeamMembers = computed(() => {
 
 const verComprobante = async (comprobante: string) => {
     comprobanteSeleccionado.value = comprobante;
+    comprobanteImgLoading.value = true;
     showModal.value = true;
+};
+
+const onComprobanteImgLoad = () => {
+    comprobanteImgLoading.value = false;
 };
 
 const closeModal = () => {
@@ -44,51 +69,73 @@ const closeModal = () => {
 };
 
 onMounted(async () => {
-    const gameResponse = await axios.get('/api/juegos');
-    games.value = gameResponse.data;
-
-    if (games.value.length > 0) {
-        selectedGame.value = games.value[0].id;
-        await updateInscriptions();
+    loadingGames.value = true;
+    try {
+        const gameResponse = await axios.get('/api/juegos');
+        games.value = gameResponse.data;
+        // No selecciona automáticamente el primer juego
+        // selectedGame.value = games.value.length > 0 ? games.value[0].id : null;
+    } finally {
+        loadingGames.value = false;
     }
 });
 
 watch(selectedGame, async (newVal) => {
     if (newVal) {
         await updateInscriptions();
+    } else {
+        inscripciones.value = [];
     }
 });
 
 const generateReport = async () => {
-    const response = await axios.post('/report_participantes_by_game', { game: selectedGame.value }, { responseType: 'blob' });
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    const contentDisposition = response.headers['content-disposition'];
-    let fileName = 'report.pdf';
-    if (contentDisposition) {
-        const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-        if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+    loadingReport.value = true;
+    try {
+        const response = await axios.post('/report_participantes_by_game', { game: selectedGame.value }, { responseType: 'blob' });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        const contentDisposition = response.headers['content-disposition'];
+        let fileName = 'report.pdf';
+        if (contentDisposition) {
+            const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+        }
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    } finally {
+        loadingReport.value = false;
     }
-    link.setAttribute('download', fileName);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
 };
 
 const updateInscriptions = async () => {
-    const inscriptionResponse = await axios.post('/get_inscripciones_by_game', { game: selectedGame.value });
-    inscripciones.value = [...inscriptionResponse.data.inscripcionesIndividuales, ...inscriptionResponse.data.inscripcionesGrupales];
+    loadingInscriptions.value = true;
+    try {
+        const inscriptionResponse = await axios.post('/get_inscripciones_by_game', { game: selectedGame.value });
+        inscripciones.value = [...inscriptionResponse.data.inscripcionesIndividuales, ...inscriptionResponse.data.inscripcionesGrupales];
+    } finally {
+        loadingInscriptions.value = false;
+    }
 };
 
 const updatePaymentStatus = async (participante: { id: number; user_id: number; id_juego: number; estado_pago: string }) => {
-    await axios.post('/update_pago', {
-        id: participante.id,
-        user_id: participante.user_id,
-        id_juego: participante.id_juego,
-        estado_pago: participante.estado_pago,
-    });
-    message.value = 'El estado del pago ha sido actualizado.';
+    loadingPago.value = participante.id;
+    try {
+        await axios.post('/update_pago', {
+            id: participante.id,
+            user_id: participante.user_id,
+            id_juego: participante.id_juego,
+            estado_pago: participante.estado_pago,
+        });
+        toast('Estado actualizado', {
+            description: 'El estado del pago ha sido actualizado.',
+        });
+        message.value = '';
+    } finally {
+        loadingPago.value = null;
+    }
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -103,158 +150,178 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Participantes" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <template #header>
-            <h2 class="font-semibold text-xl text-custom-black dark:text-custom-beige leading-tight">Participantes</h2>
-        </template>
-
         <div class="py-12 animate__animated animate__fadeInUp">
             <div class="sm:px-6 lg:px-8">
-                <div class="bg-custom-beige dark:bg-custom-gray shadow-lg sm:rounded-lg p-6 border border-custom-gray-light/20">
+                <div class="bg-beige dark:bg-black shadow-lg sm:rounded-lg p-6 border border-gray-light/20">
                     <!-- Selector de juego -->
                     <div class="mb-8">
-                        <p class="my-2 text-custom-black dark:text-custom-beige font-medium">Selecciona un juego</p>
+                        <p class="my-2 text-black dark:text-beige font-medium">Selecciona un juego</p>
                         <div class="flex items-center space-x-4">
-                            <select
-                                v-model="selectedGame"
-                                @change="updateInscriptions"
-                                class="px-4 py-3 w-9/12 rounded-lg border-1 text-custom-black dark:text-custom-beige bg-white dark:bg-black border-custom-gray-light dark:border-custom-gray-light/30 focus:border-custom-wine focus:ring-2 focus:ring-custom-wine/20 transition-all duration-200"
-                            >
-                                <option v-for="game in games" :value="game.id" :key="game.id">
-                                    {{ game.nombre }}
-                                </option>
-                            </select>
-                            <button
+                            <Select v-model="selectedGame" :disabled="loadingGames">
+                                <SelectTrigger
+                                    class="px-4 py-3 w-9/12 rounded-lg border-1 text-black dark:text-beige dark:bg-black border-gray-light dark:border-gray-light/30 focus:border-wine focus:ring-2 focus:ring-wine/20 transition-all duration-200 flex items-center cursor-pointer"
+                                >
+                                    <SelectValue placeholder="Selecciona un juego" />
+                                    <span v-if="loadingGames" class="ml-2"><UiLoader size="sm" /></span>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem :value="null" disabled>Selecciona un juego</SelectItem>
+                                    <template v-for="game in games" :key="game.id">
+                                        <SelectItem :value="game.id" class="cursor-pointer">{{ game.nombre }}</SelectItem>
+                                    </template>
+                                </SelectContent>
+                            </Select>
+                            <Button
                                 type="button"
-                                class="w-1/4 flex justify-center items-center px-4 py-3 bg-custom-wine hover:bg-custom-wine/80 text-custom-beige border rounded-lg border-wine font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                class="w-1/4 flex justify-center items-center px-4 py-3 bg-wine hover:bg-wine/80 text-beige border rounded-lg border-wine font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer"
                                 @click="generateReport"
+                                :disabled="loadingReport || !selectedGame"
                             >
+                                <UiLoader v-if="loadingReport" class="mr-2" size="sm" />
                                 Generar Reporte
-                            </button>
+                            </Button>
                         </div>
                     </div>
 
-                    <!-- Tabla de participantes -->
-                    <div v-if="inscripciones.length" class="overflow-hidden rounded-lg shadow-lg border border-custom-gray-light/20">
-                        <table class="w-full bg-white dark:bg-black">
-                            <thead class="bg-custom-gray-light/10 dark:bg-custom-gray">
-                                <th
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                    <!-- Loading inscripciones -->
+                    <div v-if="loadingInscriptions" class="flex justify-center items-center py-12">
+                        <UiLoader size="lg" color="text-wine" />
+                    </div>
+                    <Table
+                        v-else-if="inscripciones.length"
+                        class="overflow-hidden rounded-lg shadow-lg border border-gray-light/20 w-full dark:bg-black"
+                    >
+                        <TableHeader class="bg-gray-light/10 dark:bg-gray">
+                            <TableRow>
+                                <TableCell
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >#</TableCell
                                 >
-                                    #
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                                <TableCell
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >Nombre</TableCell
                                 >
-                                    Nombre
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                                <TableCell
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >Teléfono</TableCell
                                 >
-                                    Teléfono
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                                <TableCell
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >Juego</TableCell
                                 >
-                                    Juego
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                                <TableCell
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >Nro. Comprobante</TableCell
                                 >
-                                    Nro. Comprobante
-                                </th>
-                                <th
+                                <TableCell
                                     v-if="hasTeamMembers"
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >Miembros</TableCell
                                 >
-                                    Miembros
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                                <TableCell
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >Valor</TableCell
                                 >
-                                    Valor
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-sm font-semibold text-custom-black dark:text-custom-beige uppercase tracking-wider"
+                                <TableCell
+                                    as="th"
+                                    class="px-6 py-4 text-left text-sm font-semibold text-black dark:text-beige uppercase tracking-wider"
+                                    >Acción</TableCell
                                 >
-                                    Acción
-                                </th>
-                            </thead>
-                            <tbody class="divide-y divide-custom-gray-light/20 dark:divide-custom-gray-light/10">
-                                <tr
-                                    v-for="(participante, i) in inscripciones"
-                                    :key="participante.id"
-                                    class="hover:bg-custom-beige/30 dark:hover:bg-custom-gray/50 transition-colors duration-150"
-                                >
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-custom-gray dark:text-custom-gray-light">
-                                        {{ i + 1 }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-custom-black dark:text-custom-beige">
-                                        {{
-                                            participante.user
-                                                ? participante.user.name
-                                                : participante.equipo && participante.equipo.user
-                                                  ? participante.equipo.user.name
-                                                  : ''
-                                        }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-custom-gray dark:text-custom-gray-light">
-                                        {{
-                                            participante.user
-                                                ? participante.user.phone
-                                                : participante.equipo && participante.equipo.user
-                                                  ? participante.equipo.user.phone
-                                                  : ''
-                                        }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-custom-gray dark:text-custom-gray-light">
-                                        {{ participante.nombre_juego }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-custom-gray dark:text-custom-gray-light">
-                                        <div class="flex items-center space-x-2">
-                                            <span>{{ participante.nro_comprobante }}</span>
-                                            <button
-                                                @click="verComprobante(participante.comprobante_pago)"
-                                                class="text-custom-wine hover:text-custom-wine/70 transition-colors duration-150 p-1 rounded"
-                                            >
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td
-                                        v-if="hasTeamMembers"
-                                        class="px-6 py-4 whitespace-nowrap text-sm text-custom-gray dark:text-custom-gray-light"
-                                    >
-                                        {{ participante.equipo ? participante.equipo.miembros : '' }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-custom-wine">
-                                        ${{ parseFloat(participante.valor_comprobante).toFixed(2) }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <select
-                                            v-model="participante.estado_pago"
-                                            @change="
+                            </TableRow>
+                        </TableHeader>
+                        <tbody class="divide-y divide-gray-light/20 dark:divide-gray-light/10">
+                            <TableRow
+                                v-for="(participante, i) in inscripciones"
+                                :key="participante.id"
+                                class="hover:bg-beige/30 dark:hover:bg-gray/50 transition-colors duration-150"
+                            >
+                                <TableCell class="px-6 py-4 whitespace-nowrap text-sm text-gray dark:text-gray-light">{{ i + 1 }}</TableCell>
+                                <TableCell class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black dark:text-beige">
+                                    {{
+                                        participante.user
+                                            ? participante.user.name
+                                            : participante.equipo && participante.equipo.user
+                                              ? participante.equipo.user.name
+                                              : ''
+                                    }}
+                                </TableCell>
+                                <TableCell class="px-6 py-4 whitespace-nowrap text-sm text-gray dark:text-gray-light">
+                                    {{
+                                        participante.user
+                                            ? participante.user.phone
+                                            : participante.equipo && participante.equipo.user
+                                              ? participante.equipo.user.phone
+                                              : ''
+                                    }}
+                                </TableCell>
+                                <TableCell class="px-6 py-4 whitespace-nowrap text-sm text-gray dark:text-gray-light">
+                                    {{ participante.nombre_juego }}
+                                </TableCell>
+                                <TableCell class="px-6 py-4 whitespace-nowrap text-sm text-gray dark:text-gray-light">
+                                    <div class="flex items-center space-x-2">
+                                        <span>{{ participante.nro_comprobante }}</span>
+                                        <Button
+                                            @click="verComprobante(participante.comprobante_pago)"
+                                            class="bg-beige dark:bg-black text-white hover:text-wine/70 transition-colors duration-150 p-1 rounded cursor-pointer"
+                                        >
+                                            <EyeIcon></EyeIcon>
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                                <TableCell v-if="hasTeamMembers" class="px-6 py-4 whitespace-nowrap text-sm text-gray dark:text-gray-light">
+                                    {{ participante.equipo ? participante.equipo.miembros : '' }}
+                                </TableCell>
+                                <TableCell class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-wine">
+                                    ${{ parseFloat(participante.valor_comprobante).toFixed(2) }}
+                                </TableCell>
+                                <TableCell class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <Select
+                                        v-model="participante.estado_pago"
+                                        @update:modelValue="
+                                            () =>
                                                 updatePaymentStatus({
                                                     id: participante.id,
                                                     user_id: participante.user?.id || 0,
                                                     id_juego: selectedGame || 0,
                                                     estado_pago: participante.estado_pago,
                                                 })
-                                            "
-                                            class="block w-full px-3 py-2 rounded-lg border-2 border-custom-gray-light/30 bg-White dark:bg-black text-custom-black dark:text-custom-beige focus:border-custom-wine focus:ring-2 focus:ring-custom-wine/20 transition-all duration-200"
+                                        "
+                                        :disabled="loadingPago === participante.id"
+                                    >
+                                        <SelectTrigger
+                                            class="w-full px-3 rounded-lg border-2 border-gray/30 dark:bg-black text-black dark:text-beige focus:border-wine focus:ring-2 focus:ring-wine/20 transition-all duration-200 flex items-center cursor-pointer"
                                         >
-                                            <option value="verificado">Verificado</option>
-                                            <option value="pendiente">Pendiente</option>
-                                            <option value="cancelado">Cancelado</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Mensaje de estado -->
-                    <div v-if="message" class="mt-6 p-4 bg-white dark:bg-black border border-white dark:border-white rounded-lg">
-                        <p class="text-wine dark:text-wine font-medium">{{ message }}</p>
+                                            <SelectValue />
+                                            <span v-if="loadingPago === participante.id" class="ml-2"><UiLoader size="sm" /></span>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="verificado" class="cursor-pointer">Verificado</SelectItem>
+                                            <SelectItem value="pendiente" class="cursor-pointer">Pendiente</SelectItem>
+                                            <SelectItem value="cancelado" class="cursor-pointer">Cancelado</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </TableCell>
+                            </TableRow>
+                        </tbody>
+                    </Table>
+                    <!-- Mensaje si no hay inscripciones o no se ha seleccionado juego -->
+                    <div v-else class="flex flex-col items-center justify-center py-12 text-gray dark:text-gray-light">
+                        <PointerIcon v-if="selectedGame === null" class="w-8 h-8 mb-2" />
+                        <XIcon v-else class="w-8 h-8 mb-2" />
+                        <span class="text-lg font-medium">
+                            {{
+                                selectedGame === null
+                                    ? 'Selecciona un juego para ver sus inscripciones.'
+                                    : 'No se encuentran inscripciones en este juego.'
+                            }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -262,93 +329,17 @@ const breadcrumbs: BreadcrumbItem[] = [
 
         <!-- Modal para comprobante -->
         <Modal :show="showModal" @close="closeModal">
-            <div v-if="showModal" class="flex items-center justify-center p-6 bg-white dark:bg-custom-black rounded-lg">
+            <div v-if="showModal" class="flex items-center justify-center p-6 dark:bg-black rounded-lg min-h-[300px] min-w-[300px]">
+                <UiLoader v-if="comprobanteImgLoading" size="lg" color="text-wine" />
                 <img
-                    :src="'storage/' + comprobanteSeleccionado"
+                    v-show="!comprobanteImgLoading"
+                    :src="comprobanteSeleccionado"
                     alt="Comprobante de Pago"
-                    class="max-w-full max-h-96 rounded-lg shadow-lg border border-custom-gray-light/20"
+                    class="max-w-full max-h-96 rounded-lg shadow-lg border border-gray-light/20"
+                    @load="onComprobanteImgLoad"
                 />
             </div>
         </Modal>
+        <Toaster />
     </AppLayout>
 </template>
-
-<style scoped>
-.custom-width {
-    min-height: calc(80vh - 60px);
-    height: calc(100vh - 60px);
-}
-
-/* Definición de colores personalizados */
-:root {
-    --color-custom-black: #070706;
-    --color-custom-gray: #3c3c36;
-    --color-custom-gray-light: #7c7c72;
-    --color-custom-beige: #e2d9ca;
-    --color-custom-wine: #72211d;
-}
-
-/* Clases de utilidad personalizadas */
-.text-custom-black {
-    color: var(--color-custom-black);
-}
-.text-custom-gray {
-    color: var(--color-custom-gray);
-}
-.text-custom-gray-light {
-    color: var(--color-custom-gray-light);
-}
-.text-custom-beige {
-    color: var(--color-custom-beige);
-}
-.text-custom-wine {
-    color: var(--color-custom-wine);
-}
-
-.bg-custom-black {
-    background-color: var(--color-custom-black);
-}
-.bg-custom-gray {
-    background-color: var(--color-custom-gray);
-}
-.bg-custom-gray-light {
-    background-color: var(--color-custom-gray-light);
-}
-.bg-custom-beige {
-    background-color: var(--color-custom-beige);
-}
-.bg-custom-wine {
-    background-color: var(--color-custom-wine);
-}
-
-.border-custom-black {
-    border-color: var(--color-custom-black);
-}
-.border-custom-gray {
-    border-color: var(--color-custom-gray);
-}
-.border-custom-gray-light {
-    border-color: var(--color-custom-gray-light);
-}
-.border-custom-beige {
-    border-color: var(--color-custom-beige);
-}
-.border-custom-wine {
-    border-color: var(--color-custom-wine);
-}
-
-/* Estados de hover y focus */
-.hover\:bg-custom-wine\/80:hover {
-    background-color: rgb(114 33 29 / 0.8);
-}
-.hover\:text-custom-wine\/70:hover {
-    color: rgb(114 33 29 / 0.7);
-}
-.focus\:border-custom-wine:focus {
-    border-color: var(--color-custom-wine);
-}
-.focus\:ring-custom-wine\/20:focus {
-    --tw-ring-color: rgb(114 33 29 / 0.2);
-    box-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-}
-</style>
