@@ -7,6 +7,8 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\InscripcionIndividualController;
+use App\Http\Controllers\ReportesController;
+
 
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
@@ -15,6 +17,7 @@ Route::get('/', [WelcomeController::class, 'index'])->name('home');
 Route::middleware(['auth'])->group(function () {
     Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
 });
+
 
 
 // EQUIPO
@@ -29,6 +32,7 @@ Route::put('/equipos/{id}', [EquipoController::class, 'update']);
 
 
 Route::post('/get_inscripciones_by_game', [InscripcionIndividualController::class, 'get_inscripciones_by_game']);
+Route::post('/report_participantes_by_game', [ReportesController::class, 'report_participantes_by_game']); 
 Route::post('/guardar_all_inscripciones', [InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
 
 Route::get('/ads', [AdModelController::class, 'getAds']);

@@ -13,7 +13,7 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role, string $to): Response
+    public function handle(Request $request, Closure $next, string $role, string $to = 'dashborad'): Response
     {
         $user = $request->user();
 
