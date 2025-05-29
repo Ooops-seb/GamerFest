@@ -5,7 +5,7 @@
         </h2>
         <!-- Depuración: Mostrar el array juegos -->
         <div class="w-full flex flex-wrap gap-4 justify-center">
-            <div v-for="juego in juegos" :key="juego.id">
+            <div v-for="juego in juegos.filter((j) => j.active)" :key="juego.id">
                 <div class="flex flex-col items-center mb-4">
                     <CardCheckbox
                         :gameId="juego.id"
@@ -34,7 +34,7 @@
         </h2>
 
         <div class="w-full flex flex-wrap gap-4 justify-center">
-            <div v-for="juego in juegosGrupo" :key="juego.id">
+            <div v-for="juego in juegosGrupo.filter((j) => j.active)" :key="juego.id">
                 <div class="flex flex-col items-center mb-4">
                     <CardCheckbox
                         :gameId="juego.id"
@@ -80,6 +80,7 @@ defineProps<{
         img_id: string;
         estaInscrito: boolean;
         reglamentos_pdf: string;
+        active: boolean;
     }[];
     juegosGrupo: {
         id: number;
@@ -88,6 +89,7 @@ defineProps<{
         img_id: string;
         estaInscrito: boolean;
         reglamentos_pdf: string;
+        active: boolean;
     }[];
 }>();
 

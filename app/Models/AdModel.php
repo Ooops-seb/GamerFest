@@ -13,5 +13,6 @@ class AdModel extends Model
         'title',
         'description',
         'image_url',
+        'active',
     ];
 }

@@ -33,7 +33,8 @@ class WelcomeController extends Controller
                 'costo_inscripcion' => $juego->costo_inscripcion,
                 'img_id' => $juego->img_id,
                 'reglamentos_pdf' => $juego->reglamentos_pdf,
-                'estaInscrito' => $juego->inscripcionesGrupales->pluck('equipo')->where('user_id', $userId)->count() > 0
+                'estaInscrito' => $juego->inscripcionesGrupales->pluck('equipo')->where('user_id', $userId)->count() > 0,
+                'active' => $juego->active,
             ];
         });
 
@@ -44,7 +45,8 @@ class WelcomeController extends Controller
                 'costo_inscripcion' => $juego->costo_inscripcion,
                 'img_id' => $juego->img_id,
                 'reglamentos_pdf' => $juego->reglamentos_pdf,
-                'estaInscrito' => $juego->inscripcionesIndividuales->where('user_id', $userId)->count() > 0
+                'estaInscrito' => $juego->inscripcionesIndividuales->where('user_id', $userId)->count() > 0,
+                'active' => $juego->active,
             ];
         });
 
