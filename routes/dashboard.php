@@ -30,4 +30,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/mis_equipos', [DashboardController::class, 'mis_equipos'])
         ->name('mis_equipos');
+
+    Route::get('/inscripciones', [DashboardController::class, 'inscripciones'])
+        ->middleware('role:admin')
+        ->name('inscripciones.dashboard');
+
+    Route::post('/inscripciones/actualizar-estado', [DashboardController::class, 'actualizarEstado'])
+        ->middleware('role:admin');
 });

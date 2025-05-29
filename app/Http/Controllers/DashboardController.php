@@ -158,4 +158,42 @@ class DashboardController extends Controller
         }
     }
 
+    public function inscripciones()
+    {
+        $inscripciones_individuales = InscripcionIndividual::with(['user', 'juego'])->get();
+        $inscripciones_grupales = InscripcionGrupal::with(['equipo.user', 'juego'])->get();
+        return Inertia::render('DashboardPage/Inscripciones/Incripciones', [
+            'inscripciones_individuales' => $inscripciones_individuales,
+            'inscripciones_grupales' => $inscripciones_grupales,
+            'role' => Auth::user()->hasRole("admin"),
+        ]);
+    }
+
+    public function actualizarEstado(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'id_juego' => 'required|integer',
+            'estado_pago' => 'required|string',
+            'modalidad' => 'required|string',
+        ]);
+
+        if ($request->modalidad === 'Individual') {
+            $inscripcion = InscripcionIndividual::find($request->id);
+        } else {
+            $inscripcion = InscripcionGrupal::find($request->id);
+        }
+
+        if (!$inscripcion) {
+            return redirect()->back()->with('error', 'Inscripción no encontrada.');
+        }
+
+        $inscripcion->estado_pago = $request->estado_pago;
+        $inscripcion->save();
+
+        // Redirigir de vuelta con un mensaje de éxito
+        return redirect()->back()->with('success', 'Estado de pago actualizado correctamente.');
+    }
+
 }
