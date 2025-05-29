@@ -13,5 +13,6 @@ class Sponsor extends Model
         'nombre',
         'url_pagina',
         'url_imagen',
+        'active',
     ];
 }

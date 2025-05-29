@@ -13,7 +13,7 @@
 
             <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
                 <div
-                    v-for="sponsor in sponsors"
+                    v-for="sponsor in sponsors.filter((s) => s.active)"
                     :key="sponsor.id || sponsor.nombre"
                     class="flex flex-col items-center transition-transform duration-300 hover:-translate-y-1"
                 >
@@ -59,6 +59,7 @@ interface Sponsor {
     url_pagina: string;
     url_imagen: string;
     nombre: string;
+    active: boolean;
 }
 
 defineProps({

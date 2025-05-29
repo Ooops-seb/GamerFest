@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\Juego;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DB;
 
 class ReportesController extends Controller
@@ -35,7 +35,7 @@ class ReportesController extends Controller
                         'title' => 'Reporte participantes '.$juego->nombre,
                         'inscripciones' => $inscripciones
                     ];    
-                    $pdf = PDF::loadView('reportes.reporte_inscripciones_grupales', $data); 
+                    $pdf = Pdf::loadView('reportes.reporte_inscripciones_grupales', $data); 
                     $pdf->setPaper('A4', 'landscape');
                     return $pdf->download('PARTICIPANTES-' .  Str::upper($juego->nombre) . '-' . date('YmdHis') . '.pdf'); 
                 }
@@ -46,7 +46,7 @@ class ReportesController extends Controller
                     'inscripciones' => $inscripciones
                 ];
     
-                $pdf = PDF::loadView('reportes.reporte_inscripciones_individuales', $data); 
+                $pdf = Pdf::loadView('reportes.reporte_inscripciones_individuales', $data); 
                 return $pdf->download('PARTICIPANTES-' .  Str::upper($juego->nombre) . '-' . date('YmdHis') . '.pdf'); 
             }
 
@@ -121,12 +121,12 @@ class ReportesController extends Controller
             ];    
 
             if($tipo_certificado == "diploma"){ 
-                $pdf = PDF::loadView('reportes.diploma', $data); 
+                $pdf = Pdf::loadView('reportes.diploma', $data); 
                 $pdf->setPaper('A4', 'landscape');
                 return $pdf->download('DIPLOMA-' .  Str::upper($user->name) . '-' . date('YmdHis') . '.pdf'); 
             }
 
-            $pdf = PDF::loadView('reportes.certificado', $data); 
+            $pdf = Pdf::loadView('reportes.certificado', $data); 
             return $pdf->download('DIPLOMA-' .  Str::upper($user->name) . '-' . date('YmdHis') . '.pdf'); 
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ha ocurrido un error: ' . $e->getMessage()], 500);
