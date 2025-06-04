@@ -14,26 +14,24 @@ use App\Http\Controllers\ReportesController;
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
 //Platform Routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
-});
-
-
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+// });
 
 // EQUIPO
-Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
+// Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
 Route::get('/equipos', [EquipoController::class, 'index']);
 Route::get('/equipos/{id}', [EquipoController::class, 'show']);
 Route::get('/equipos/{id}/miembros', [EquipoController::class, 'getMiembros']);
-Route::post('/equipos', [EquipoController::class, 'store']);
-Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
+// Route::post('/equipos', [EquipoController::class, 'store']);
+// Route::post('/equipo_por_juego', [EquipoController::class, 'equipo_por_juego']);
 Route::delete('/equipos/{id}', [EquipoController::class, 'destroy']);
 Route::put('/equipos/{id}', [EquipoController::class, 'update']);
 
 
 Route::post('/get_inscripciones_by_game', [InscripcionIndividualController::class, 'get_inscripciones_by_game']);
-Route::post('/report_participantes_by_game', [ReportesController::class, 'report_participantes_by_game']); 
-Route::post('/guardar_all_inscripciones', [InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
+Route::post('/report_participantes_by_game', [ReportesController::class, 'report_participantes_by_game']);
+// Route::post('/guardar_all_inscripciones', [InscripcionIndividualController::class, 'guardar_all_inscripciones'])->name('inscripciones.store');
 
 Route::get('/ads', [AdModelController::class, 'getAds']);
 // Route::get('/ads', [AdModelController::class, 'index'])->name('ads.index');
