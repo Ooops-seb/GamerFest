@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+// import { Link } from '@inertiajs/vue3';
 import { ChevronDown } from 'lucide-vue-next';
 import { ref } from 'vue';
-import { route } from 'ziggy-js';
+// import { route } from 'ziggy-js';
 import iconLight from '@/../../public/images/Icon2025black.webp';
 import iconDark from '@/../../public/images/Icon2025white.webp';
 import AdsContent from '../AdsContent.vue';
@@ -191,7 +191,7 @@ const navigationItems: NavigationItems[] = [
 
                     <!-- Botones de autenticación -->
                     <div class="flex items-center space-x-4">
-                        <Link
+                        <!-- <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"
                             class="hidden md:inline-block dark:text-beige border border-beige hover:bg-wine hover:border-wine hover:text-beige px-4 py-2 text-sm font-cinzel rounded transition-colors duration-200"
@@ -211,8 +211,8 @@ const navigationItems: NavigationItems[] = [
                             >
                                 Registrarse
                             </Link>
-                        </template>
-                        <Link :href="route('carrito')" class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-wine dark:text-white glitch" id="cart">
+                        </template> -->
+                        <!-- <Link :href="route('carrito')" class="ml-4 mr-4 pr-2 pl-2 md:ml-0 md:mr-0 md:mt-2 text-wine dark:text-white glitch" id="cart">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 256 256" class="w-6 h-6">
                                 <path
                                     fill="currentColor"
@@ -220,7 +220,7 @@ const navigationItems: NavigationItems[] = [
                                 />
                             </svg>
                             <span class="cart-item-number">{{ numJuegosSeleccionados }}</span>
-                        </Link>
+                        </Link> -->
 
                         <!-- Botón de menú móvil -->
                         <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden text-beige hover:text-wine focus:outline-none">
@@ -280,7 +280,7 @@ const navigationItems: NavigationItems[] = [
 
                         <!-- Botones de autenticación móvil -->
                         <div class="pt-4 mt-2 border-t border-beige/10 flex space-x-4">
-                            <Link
+                            <!-- <Link
                                 v-if="$page.props.auth.user"
                                 :href="route('dashboard')"
                                 @click="isMenuOpen = false"
@@ -303,7 +303,7 @@ const navigationItems: NavigationItems[] = [
                                 >
                                     Registrarse
                                 </Link>
-                            </template>
+                            </template> -->
                         </div>
 
                         <!-- Redes sociales móvil -->
